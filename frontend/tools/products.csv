@@ -1,0 +1,944 @@
+name,category,description,price
+"Products","Pultrusion Structural Material","Products - industrial composite",0
+"Glass Fabric Laminates","Pultrusion Structural Material","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","Pultrusion Structural Material","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","Pultrusion Structural Material","Speciality Laminates - industrial composite",0
+"MICA","Pultrusion Structural Material","MICA - industrial composite",0
+"Tubes And Cylinders","Pultrusion Structural Material","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","Pultrusion Structural Material","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","Pultrusion Structural Material","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","Pultrusion Structural Material","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","Pultrusion Structural Material","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","Pultrusion Structural Material","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","Pultrusion Structural Material","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","Pultrusion Structural Material","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","Pultrusion Structural Material","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","Pultrusion Structural Material","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","Pultrusion Structural Material","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","Pultrusion Structural Material","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","Pultrusion Structural Material","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","Pultrusion Structural Material","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","Pultrusion Structural Material","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","Pultrusion Structural Material","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","Pultrusion Structural Material","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","Pultrusion Structural Material","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","Pultrusion Structural Material","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","Pultrusion Structural Material","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","Pultrusion Structural Material","Magnetic Laminates - industrial composite",0
+"MICA Tubes","Pultrusion Structural Material","MICA Tubes - industrial composite",0
+"MICA Sheet","Pultrusion Structural Material","MICA Sheet - industrial composite",0
+"MICA Paper","Pultrusion Structural Material","MICA Paper - industrial composite",0
+"MICA Tape","Pultrusion Structural Material","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","Pultrusion Structural Material","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","Pultrusion Structural Material","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","Pultrusion Structural Material","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","Pultrusion Structural Material","Calcinied MICA Tape - industrial composite",0
+"Products |","Pultrusion Structural Material","Products | - industrial composite",0
+"GPO-1","Pultrusion Structural Material","GPO-1 - industrial composite",0
+"GPO-2","Pultrusion Structural Material","GPO-2 - industrial composite",0
+"GPO-3","Pultrusion Structural Material","GPO-3 - industrial composite",0
+"SG204","Pultrusion Structural Material","SG204 - industrial composite",0
+"HT276","Pultrusion Structural Material","HT276 - industrial composite",0
+"Products","Tubes And Cylinders","Products - industrial composite",0
+"Glass Fabric Laminates","Tubes And Cylinders","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","Tubes And Cylinders","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","Tubes And Cylinders","Speciality Laminates - industrial composite",0
+"MICA","Tubes And Cylinders","MICA - industrial composite",0
+"Tubes And Cylinders","Tubes And Cylinders","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","Tubes And Cylinders","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","Tubes And Cylinders","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","Tubes And Cylinders","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","Tubes And Cylinders","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","Tubes And Cylinders","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","Tubes And Cylinders","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","Tubes And Cylinders","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","Tubes And Cylinders","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","Tubes And Cylinders","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","Tubes And Cylinders","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","Tubes And Cylinders","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","Tubes And Cylinders","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","Tubes And Cylinders","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","Tubes And Cylinders","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","Tubes And Cylinders","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","Tubes And Cylinders","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","Tubes And Cylinders","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","Tubes And Cylinders","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","Tubes And Cylinders","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","Tubes And Cylinders","Magnetic Laminates - industrial composite",0
+"MICA Tubes","Tubes And Cylinders","MICA Tubes - industrial composite",0
+"MICA Sheet","Tubes And Cylinders","MICA Sheet - industrial composite",0
+"MICA Paper","Tubes And Cylinders","MICA Paper - industrial composite",0
+"MICA Tape","Tubes And Cylinders","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","Tubes And Cylinders","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","Tubes And Cylinders","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","Tubes And Cylinders","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","Tubes And Cylinders","Calcinied MICA Tape - industrial composite",0
+"Products |","Tubes And Cylinders","Products | - industrial composite",0
+"GPO-1","Tubes And Cylinders","GPO-1 - industrial composite",0
+"GPO-2","Tubes And Cylinders","GPO-2 - industrial composite",0
+"GPO-3","Tubes And Cylinders","GPO-3 - industrial composite",0
+"SG204","Tubes And Cylinders","SG204 - industrial composite",0
+"HT276","Tubes And Cylinders","HT276 - industrial composite",0
+"Products","Threaded Rods","Products - industrial composite",0
+"Glass Fabric Laminates","Threaded Rods","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","Threaded Rods","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","Threaded Rods","Speciality Laminates - industrial composite",0
+"MICA","Threaded Rods","MICA - industrial composite",0
+"Tubes And Cylinders","Threaded Rods","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","Threaded Rods","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","Threaded Rods","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","Threaded Rods","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","Threaded Rods","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","Threaded Rods","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","Threaded Rods","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","Threaded Rods","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","Threaded Rods","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","Threaded Rods","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","Threaded Rods","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","Threaded Rods","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","Threaded Rods","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","Threaded Rods","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","Threaded Rods","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","Threaded Rods","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","Threaded Rods","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","Threaded Rods","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","Threaded Rods","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","Threaded Rods","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","Threaded Rods","Magnetic Laminates - industrial composite",0
+"MICA Tubes","Threaded Rods","MICA Tubes - industrial composite",0
+"MICA Sheet","Threaded Rods","MICA Sheet - industrial composite",0
+"MICA Paper","Threaded Rods","MICA Paper - industrial composite",0
+"MICA Tape","Threaded Rods","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","Threaded Rods","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","Threaded Rods","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","Threaded Rods","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","Threaded Rods","Calcinied MICA Tape - industrial composite",0
+"Products |","Threaded Rods","Products | - industrial composite",0
+"GPO-1","Threaded Rods","GPO-1 - industrial composite",0
+"GPO-2","Threaded Rods","GPO-2 - industrial composite",0
+"GPO-3","Threaded Rods","GPO-3 - industrial composite",0
+"SG204","Threaded Rods","SG204 - industrial composite",0
+"HT276","Threaded Rods","HT276 - industrial composite",0
+"Products","Machined Components","Products - industrial composite",0
+"Glass Fabric Laminates","Machined Components","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","Machined Components","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","Machined Components","Speciality Laminates - industrial composite",0
+"MICA","Machined Components","MICA - industrial composite",0
+"Tubes And Cylinders","Machined Components","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","Machined Components","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","Machined Components","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","Machined Components","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","Machined Components","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","Machined Components","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","Machined Components","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","Machined Components","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","Machined Components","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","Machined Components","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","Machined Components","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","Machined Components","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","Machined Components","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","Machined Components","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","Machined Components","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","Machined Components","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","Machined Components","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","Machined Components","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","Machined Components","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","Machined Components","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","Machined Components","Magnetic Laminates - industrial composite",0
+"MICA Tubes","Machined Components","MICA Tubes - industrial composite",0
+"MICA Sheet","Machined Components","MICA Sheet - industrial composite",0
+"MICA Paper","Machined Components","MICA Paper - industrial composite",0
+"MICA Tape","Machined Components","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","Machined Components","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","Machined Components","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","Machined Components","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","Machined Components","Calcinied MICA Tape - industrial composite",0
+"Products |","Machined Components","Products | - industrial composite",0
+"GPO-1","Machined Components","GPO-1 - industrial composite",0
+"GPO-2","Machined Components","GPO-2 - industrial composite",0
+"GPO-3","Machined Components","GPO-3 - industrial composite",0
+"SG204","Machined Components","SG204 - industrial composite",0
+"HT276","Machined Components","HT276 - industrial composite",0
+"Products","Molded Parts","Products - industrial composite",0
+"Glass Fabric Laminates","Molded Parts","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","Molded Parts","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","Molded Parts","Speciality Laminates - industrial composite",0
+"MICA","Molded Parts","MICA - industrial composite",0
+"Tubes And Cylinders","Molded Parts","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","Molded Parts","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","Molded Parts","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","Molded Parts","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","Molded Parts","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","Molded Parts","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","Molded Parts","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","Molded Parts","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","Molded Parts","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","Molded Parts","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","Molded Parts","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","Molded Parts","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","Molded Parts","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","Molded Parts","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","Molded Parts","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","Molded Parts","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","Molded Parts","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","Molded Parts","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","Molded Parts","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","Molded Parts","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","Molded Parts","Magnetic Laminates - industrial composite",0
+"MICA Tubes","Molded Parts","MICA Tubes - industrial composite",0
+"MICA Sheet","Molded Parts","MICA Sheet - industrial composite",0
+"MICA Paper","Molded Parts","MICA Paper - industrial composite",0
+"MICA Tape","Molded Parts","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","Molded Parts","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","Molded Parts","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","Molded Parts","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","Molded Parts","Calcinied MICA Tape - industrial composite",0
+"Products |","Molded Parts","Products | - industrial composite",0
+"GPO-1","Molded Parts","GPO-1 - industrial composite",0
+"GPO-2","Molded Parts","GPO-2 - industrial composite",0
+"GPO-3","Molded Parts","GPO-3 - industrial composite",0
+"SG204","Molded Parts","SG204 - industrial composite",0
+"HT276","Molded Parts","HT276 - industrial composite",0
+"Products","Copper Clad Laminate","Products - industrial composite",0
+"Glass Fabric Laminates","Copper Clad Laminate","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","Copper Clad Laminate","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","Copper Clad Laminate","Speciality Laminates - industrial composite",0
+"MICA","Copper Clad Laminate","MICA - industrial composite",0
+"Tubes And Cylinders","Copper Clad Laminate","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","Copper Clad Laminate","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","Copper Clad Laminate","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","Copper Clad Laminate","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","Copper Clad Laminate","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","Copper Clad Laminate","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","Copper Clad Laminate","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","Copper Clad Laminate","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","Copper Clad Laminate","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","Copper Clad Laminate","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","Copper Clad Laminate","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","Copper Clad Laminate","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","Copper Clad Laminate","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","Copper Clad Laminate","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","Copper Clad Laminate","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","Copper Clad Laminate","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","Copper Clad Laminate","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","Copper Clad Laminate","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","Copper Clad Laminate","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","Copper Clad Laminate","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","Copper Clad Laminate","Magnetic Laminates - industrial composite",0
+"MICA Tubes","Copper Clad Laminate","MICA Tubes - industrial composite",0
+"MICA Sheet","Copper Clad Laminate","MICA Sheet - industrial composite",0
+"MICA Paper","Copper Clad Laminate","MICA Paper - industrial composite",0
+"MICA Tape","Copper Clad Laminate","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","Copper Clad Laminate","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","Copper Clad Laminate","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","Copper Clad Laminate","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","Copper Clad Laminate","Calcinied MICA Tape - industrial composite",0
+"Glass Fabric Laminates |","Copper Clad Laminate","Glass Fabric Laminates | - industrial composite",0
+"Products","NEMA FR4","Products - industrial composite",0
+"Glass Fabric Laminates","NEMA FR4","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","NEMA FR4","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","NEMA FR4","Speciality Laminates - industrial composite",0
+"MICA","NEMA FR4","MICA - industrial composite",0
+"Tubes And Cylinders","NEMA FR4","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","NEMA FR4","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","NEMA FR4","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","NEMA FR4","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","NEMA FR4","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","NEMA FR4","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","NEMA FR4","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","NEMA FR4","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","NEMA FR4","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","NEMA FR4","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","NEMA FR4","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","NEMA FR4","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","NEMA FR4","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","NEMA FR4","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","NEMA FR4","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","NEMA FR4","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","NEMA FR4","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","NEMA FR4","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","NEMA FR4","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","NEMA FR4","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","NEMA FR4","Magnetic Laminates - industrial composite",0
+"MICA Tubes","NEMA FR4","MICA Tubes - industrial composite",0
+"MICA Sheet","NEMA FR4","MICA Sheet - industrial composite",0
+"MICA Paper","NEMA FR4","MICA Paper - industrial composite",0
+"MICA Tape","NEMA FR4","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","NEMA FR4","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","NEMA FR4","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","NEMA FR4","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","NEMA FR4","Calcinied MICA Tape - industrial composite",0
+"Glass Fabric Laminates |","NEMA FR4","Glass Fabric Laminates | - industrial composite",0
+"NEMA FR4","NEMA FR4","NEMA FR4 - industrial composite",0
+"Excellent chemical resistance & radiation resistance","NEMA FR4","Excellent chemical resistance & radiation resistance - industrial composite",0
+"RoHS, Reach certified products","NEMA FR4","RoHS, Reach certified products - industrial composite",0
+"Previous product","NEMA FR4","Previous product - industrial composite",0
+"next product","NEMA FR4","next product - industrial composite",0
+"View All Products","NEMA FR4","View All Products - industrial composite",0
+"Glass Mat Laminates","NEMA FR4","Glass Mat Laminates - industrial composite",0
+"Magnetic Products","NEMA FR4","Magnetic Products - industrial composite",0
+"Products","NEMA G10","Products - industrial composite",0
+"Glass Fabric Laminates","NEMA G10","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","NEMA G10","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","NEMA G10","Speciality Laminates - industrial composite",0
+"MICA","NEMA G10","MICA - industrial composite",0
+"Tubes And Cylinders","NEMA G10","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","NEMA G10","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","NEMA G10","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","NEMA G10","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","NEMA G10","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","NEMA G10","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","NEMA G10","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","NEMA G10","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","NEMA G10","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","NEMA G10","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","NEMA G10","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","NEMA G10","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","NEMA G10","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","NEMA G10","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","NEMA G10","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","NEMA G10","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","NEMA G10","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","NEMA G10","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","NEMA G10","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","NEMA G10","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","NEMA G10","Magnetic Laminates - industrial composite",0
+"MICA Tubes","NEMA G10","MICA Tubes - industrial composite",0
+"MICA Sheet","NEMA G10","MICA Sheet - industrial composite",0
+"MICA Paper","NEMA G10","MICA Paper - industrial composite",0
+"MICA Tape","NEMA G10","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","NEMA G10","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","NEMA G10","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","NEMA G10","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","NEMA G10","Calcinied MICA Tape - industrial composite",0
+"Glass Fabric Laminates |","NEMA G10","Glass Fabric Laminates | - industrial composite",0
+"NEMA G10","NEMA G10","NEMA G10 - industrial composite",0
+"Excellent chemical resistance & radiation resistance","NEMA G10","Excellent chemical resistance & radiation resistance - industrial composite",0
+"RoHS, Reach certified products","NEMA G10","RoHS, Reach certified products - industrial composite",0
+"Previous product","NEMA G10","Previous product - industrial composite",0
+"next product","NEMA G10","next product - industrial composite",0
+"GPO3","NEMA G10","GPO3 - industrial composite",0
+"View All Products","NEMA G10","View All Products - industrial composite",0
+"Glass Mat Laminates","NEMA G10","Glass Mat Laminates - industrial composite",0
+"Magnetic Products","NEMA G10","Magnetic Products - industrial composite",0
+"Products","NEMA G11","Products - industrial composite",0
+"Glass Fabric Laminates","NEMA G11","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","NEMA G11","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","NEMA G11","Speciality Laminates - industrial composite",0
+"MICA","NEMA G11","MICA - industrial composite",0
+"Tubes And Cylinders","NEMA G11","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","NEMA G11","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","NEMA G11","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","NEMA G11","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","NEMA G11","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","NEMA G11","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","NEMA G11","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","NEMA G11","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","NEMA G11","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","NEMA G11","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","NEMA G11","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","NEMA G11","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","NEMA G11","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","NEMA G11","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","NEMA G11","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","NEMA G11","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","NEMA G11","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","NEMA G11","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","NEMA G11","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","NEMA G11","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","NEMA G11","Magnetic Laminates - industrial composite",0
+"MICA Tubes","NEMA G11","MICA Tubes - industrial composite",0
+"MICA Sheet","NEMA G11","MICA Sheet - industrial composite",0
+"MICA Paper","NEMA G11","MICA Paper - industrial composite",0
+"MICA Tape","NEMA G11","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","NEMA G11","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","NEMA G11","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","NEMA G11","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","NEMA G11","Calcinied MICA Tape - industrial composite",0
+"Glass Fabric Laminates |","NEMA G11","Glass Fabric Laminates | - industrial composite",0
+"NEMA G11","NEMA G11","NEMA G11 - industrial composite",0
+"Excellent chemical resistance & radiation resistance","NEMA G11","Excellent chemical resistance & radiation resistance - industrial composite",0
+"RoHS, Reach certified products","NEMA G11","RoHS, Reach certified products - industrial composite",0
+"GPO3","NEMA G11","GPO3 - industrial composite",0
+"Products","NEMA G7","Products - industrial composite",0
+"Glass Fabric Laminates","NEMA G7","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","NEMA G7","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","NEMA G7","Speciality Laminates - industrial composite",0
+"MICA","NEMA G7","MICA - industrial composite",0
+"Tubes And Cylinders","NEMA G7","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","NEMA G7","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","NEMA G7","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","NEMA G7","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","NEMA G7","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","NEMA G7","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","NEMA G7","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","NEMA G7","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","NEMA G7","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","NEMA G7","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","NEMA G7","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","NEMA G7","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","NEMA G7","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","NEMA G7","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","NEMA G7","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","NEMA G7","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","NEMA G7","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","NEMA G7","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","NEMA G7","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","NEMA G7","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","NEMA G7","Magnetic Laminates - industrial composite",0
+"MICA Tubes","NEMA G7","MICA Tubes - industrial composite",0
+"MICA Sheet","NEMA G7","MICA Sheet - industrial composite",0
+"MICA Paper","NEMA G7","MICA Paper - industrial composite",0
+"MICA Tape","NEMA G7","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","NEMA G7","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","NEMA G7","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","NEMA G7","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","NEMA G7","Calcinied MICA Tape - industrial composite",0
+"Glass Fabric Laminates |","NEMA G7","Glass Fabric Laminates | - industrial composite",0
+"NEMA G7","NEMA G7","NEMA G7 - industrial composite",0
+"Excellent chemical resistance & radiation resistance","NEMA G7","Excellent chemical resistance & radiation resistance - industrial composite",0
+"RoHS, Reach certified products","NEMA G7","RoHS, Reach certified products - industrial composite",0
+"GPO3","NEMA G7","GPO3 - industrial composite",0
+"Products","NEMA G5","Products - industrial composite",0
+"Glass Fabric Laminates","NEMA G5","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","NEMA G5","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","NEMA G5","Speciality Laminates - industrial composite",0
+"MICA","NEMA G5","MICA - industrial composite",0
+"Tubes And Cylinders","NEMA G5","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","NEMA G5","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","NEMA G5","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","NEMA G5","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","NEMA G5","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","NEMA G5","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","NEMA G5","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","NEMA G5","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","NEMA G5","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","NEMA G5","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","NEMA G5","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","NEMA G5","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","NEMA G5","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","NEMA G5","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","NEMA G5","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","NEMA G5","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","NEMA G5","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","NEMA G5","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","NEMA G5","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","NEMA G5","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","NEMA G5","Magnetic Laminates - industrial composite",0
+"MICA Tubes","NEMA G5","MICA Tubes - industrial composite",0
+"MICA Sheet","NEMA G5","MICA Sheet - industrial composite",0
+"MICA Paper","NEMA G5","MICA Paper - industrial composite",0
+"MICA Tape","NEMA G5","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","NEMA G5","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","NEMA G5","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","NEMA G5","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","NEMA G5","Calcinied MICA Tape - industrial composite",0
+"Products","NEMA G30","Products - industrial composite",0
+"Glass Fabric Laminates","NEMA G30","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","NEMA G30","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","NEMA G30","Speciality Laminates - industrial composite",0
+"MICA","NEMA G30","MICA - industrial composite",0
+"Tubes And Cylinders","NEMA G30","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","NEMA G30","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","NEMA G30","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","NEMA G30","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","NEMA G30","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","NEMA G30","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","NEMA G30","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","NEMA G30","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","NEMA G30","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","NEMA G30","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","NEMA G30","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","NEMA G30","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","NEMA G30","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","NEMA G30","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","NEMA G30","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","NEMA G30","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","NEMA G30","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","NEMA G30","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","NEMA G30","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","NEMA G30","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","NEMA G30","Magnetic Laminates - industrial composite",0
+"MICA Tubes","NEMA G30","MICA Tubes - industrial composite",0
+"MICA Sheet","NEMA G30","MICA Sheet - industrial composite",0
+"MICA Paper","NEMA G30","MICA Paper - industrial composite",0
+"MICA Tape","NEMA G30","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","NEMA G30","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","NEMA G30","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","NEMA G30","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","NEMA G30","Calcinied MICA Tape - industrial composite",0
+"Glass Fabric Laminates |","NEMA G30","Glass Fabric Laminates | - industrial composite",0
+"NEMA G30","NEMA G30","NEMA G30 - industrial composite",0
+"Excellent chemical resistance & radiation resistance","NEMA G30","Excellent chemical resistance & radiation resistance - industrial composite",0
+"RoHS, Reach certified products","NEMA G30","RoHS, Reach certified products - industrial composite",0
+"GPO3","NEMA G30","GPO3 - industrial composite",0
+"Products","NEMA G3","Products - industrial composite",0
+"Glass Fabric Laminates","NEMA G3","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","NEMA G3","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","NEMA G3","Speciality Laminates - industrial composite",0
+"MICA","NEMA G3","MICA - industrial composite",0
+"Tubes And Cylinders","NEMA G3","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","NEMA G3","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","NEMA G3","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","NEMA G3","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","NEMA G3","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","NEMA G3","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","NEMA G3","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","NEMA G3","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","NEMA G3","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","NEMA G3","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","NEMA G3","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","NEMA G3","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","NEMA G3","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","NEMA G3","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","NEMA G3","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","NEMA G3","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","NEMA G3","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","NEMA G3","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","NEMA G3","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","NEMA G3","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","NEMA G3","Magnetic Laminates - industrial composite",0
+"MICA Tubes","NEMA G3","MICA Tubes - industrial composite",0
+"MICA Sheet","NEMA G3","MICA Sheet - industrial composite",0
+"MICA Paper","NEMA G3","MICA Paper - industrial composite",0
+"MICA Tape","NEMA G3","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","NEMA G3","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","NEMA G3","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","NEMA G3","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","NEMA G3","Calcinied MICA Tape - industrial composite",0
+"Glass Fabric Laminates |","NEMA G3","Glass Fabric Laminates | - industrial composite",0
+"NEMA G3","NEMA G3","NEMA G3 - industrial composite",0
+"Excellent chemical resistance & radiation resistance","NEMA G3","Excellent chemical resistance & radiation resistance - industrial composite",0
+"RoHS, Reach certified products","NEMA G3","RoHS, Reach certified products - industrial composite",0
+"GPO3","NEMA G3","GPO3 - industrial composite",0
+"Products","NEMA GPO-1","Products - industrial composite",0
+"Glass Fabric Laminates","NEMA GPO-1","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","NEMA GPO-1","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","NEMA GPO-1","Speciality Laminates - industrial composite",0
+"MICA","NEMA GPO-1","MICA - industrial composite",0
+"Tubes And Cylinders","NEMA GPO-1","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","NEMA GPO-1","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","NEMA GPO-1","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","NEMA GPO-1","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","NEMA GPO-1","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","NEMA GPO-1","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","NEMA GPO-1","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","NEMA GPO-1","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","NEMA GPO-1","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","NEMA GPO-1","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","NEMA GPO-1","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","NEMA GPO-1","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","NEMA GPO-1","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","NEMA GPO-1","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","NEMA GPO-1","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","NEMA GPO-1","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","NEMA GPO-1","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","NEMA GPO-1","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","NEMA GPO-1","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","NEMA GPO-1","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","NEMA GPO-1","Magnetic Laminates - industrial composite",0
+"MICA Tubes","NEMA GPO-1","MICA Tubes - industrial composite",0
+"MICA Sheet","NEMA GPO-1","MICA Sheet - industrial composite",0
+"MICA Paper","NEMA GPO-1","MICA Paper - industrial composite",0
+"MICA Tape","NEMA GPO-1","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","NEMA GPO-1","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","NEMA GPO-1","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","NEMA GPO-1","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","NEMA GPO-1","Calcinied MICA Tape - industrial composite",0
+"Glass Matte Laminates |","NEMA GPO-1","Glass Matte Laminates | - industrial composite",0
+"NEMA GPO-1","NEMA GPO-1","NEMA GPO-1 - industrial composite",0
+"Chemical and moisture resistance: The material has excellent resistance to moisture, chemicals, and UV radiation.","NEMA GPO-1","Chemical and moisture resistance: The material has excellent resistance to moisture, chemicals, and UV radiation. - industrial composite",0
+"GPO-1","NEMA GPO-1","GPO-1 - industrial composite",0
+"GPO-2","NEMA GPO-1","GPO-2 - industrial composite",0
+"GPO-3","NEMA GPO-1","GPO-3 - industrial composite",0
+"SG204","NEMA GPO-1","SG204 - industrial composite",0
+"HT276","NEMA GPO-1","HT276 - industrial composite",0
+"Products","NEMA GPO-2","Products - industrial composite",0
+"Glass Fabric Laminates","NEMA GPO-2","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","NEMA GPO-2","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","NEMA GPO-2","Speciality Laminates - industrial composite",0
+"MICA","NEMA GPO-2","MICA - industrial composite",0
+"Tubes And Cylinders","NEMA GPO-2","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","NEMA GPO-2","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","NEMA GPO-2","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","NEMA GPO-2","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","NEMA GPO-2","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","NEMA GPO-2","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","NEMA GPO-2","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","NEMA GPO-2","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","NEMA GPO-2","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","NEMA GPO-2","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","NEMA GPO-2","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","NEMA GPO-2","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","NEMA GPO-2","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","NEMA GPO-2","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","NEMA GPO-2","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","NEMA GPO-2","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","NEMA GPO-2","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","NEMA GPO-2","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","NEMA GPO-2","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","NEMA GPO-2","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","NEMA GPO-2","Magnetic Laminates - industrial composite",0
+"MICA Tubes","NEMA GPO-2","MICA Tubes - industrial composite",0
+"MICA Sheet","NEMA GPO-2","MICA Sheet - industrial composite",0
+"MICA Paper","NEMA GPO-2","MICA Paper - industrial composite",0
+"MICA Tape","NEMA GPO-2","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","NEMA GPO-2","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","NEMA GPO-2","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","NEMA GPO-2","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","NEMA GPO-2","Calcinied MICA Tape - industrial composite",0
+"Glass Matte Laminates |","NEMA GPO-2","Glass Matte Laminates | - industrial composite",0
+"NEMA GPO-2","NEMA GPO-2","NEMA GPO-2 - industrial composite",0
+"GPO-2","NEMA GPO-2","GPO-2 - industrial composite",0
+"GPO-3","NEMA GPO-2","GPO-3 - industrial composite",0
+"SG204","NEMA GPO-2","SG204 - industrial composite",0
+"HT276","NEMA GPO-2","HT276 - industrial composite",0
+"Products","NEMA GPO3","Products - industrial composite",0
+"Glass Fabric Laminates","NEMA GPO3","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","NEMA GPO3","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","NEMA GPO3","Speciality Laminates - industrial composite",0
+"MICA","NEMA GPO3","MICA - industrial composite",0
+"Tubes And Cylinders","NEMA GPO3","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","NEMA GPO3","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","NEMA GPO3","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","NEMA GPO3","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","NEMA GPO3","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","NEMA GPO3","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","NEMA GPO3","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","NEMA GPO3","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","NEMA GPO3","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","NEMA GPO3","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","NEMA GPO3","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","NEMA GPO3","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","NEMA GPO3","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","NEMA GPO3","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","NEMA GPO3","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","NEMA GPO3","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","NEMA GPO3","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","NEMA GPO3","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","NEMA GPO3","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","NEMA GPO3","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","NEMA GPO3","Magnetic Laminates - industrial composite",0
+"MICA Tubes","NEMA GPO3","MICA Tubes - industrial composite",0
+"MICA Sheet","NEMA GPO3","MICA Sheet - industrial composite",0
+"MICA Paper","NEMA GPO3","MICA Paper - industrial composite",0
+"MICA Tape","NEMA GPO3","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","NEMA GPO3","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","NEMA GPO3","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","NEMA GPO3","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","NEMA GPO3","Calcinied MICA Tape - industrial composite",0
+"Glass Matte Laminates |","NEMA GPO3","Glass Matte Laminates | - industrial composite",0
+"NEMA GPO3","NEMA GPO3","NEMA GPO3 - industrial composite",0
+"Excellent chemical resistance & radiation resistance","NEMA GPO3","Excellent chemical resistance & radiation resistance - industrial composite",0
+"RoHS, Reach certified products","NEMA GPO3","RoHS, Reach certified products - industrial composite",0
+"Products","NEMA SG 204","Products - industrial composite",0
+"Glass Fabric Laminates","NEMA SG 204","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","NEMA SG 204","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","NEMA SG 204","Speciality Laminates - industrial composite",0
+"MICA","NEMA SG 204","MICA - industrial composite",0
+"Tubes And Cylinders","NEMA SG 204","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","NEMA SG 204","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","NEMA SG 204","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","NEMA SG 204","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","NEMA SG 204","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","NEMA SG 204","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","NEMA SG 204","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","NEMA SG 204","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","NEMA SG 204","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","NEMA SG 204","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","NEMA SG 204","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","NEMA SG 204","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","NEMA SG 204","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","NEMA SG 204","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","NEMA SG 204","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","NEMA SG 204","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","NEMA SG 204","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","NEMA SG 204","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","NEMA SG 204","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","NEMA SG 204","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","NEMA SG 204","Magnetic Laminates - industrial composite",0
+"MICA Tubes","NEMA SG 204","MICA Tubes - industrial composite",0
+"MICA Sheet","NEMA SG 204","MICA Sheet - industrial composite",0
+"MICA Paper","NEMA SG 204","MICA Paper - industrial composite",0
+"MICA Tape","NEMA SG 204","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","NEMA SG 204","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","NEMA SG 204","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","NEMA SG 204","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","NEMA SG 204","Calcinied MICA Tape - industrial composite",0
+"Glass Matte Laminates |","NEMA SG 204","Glass Matte Laminates | - industrial composite",0
+"NEMA SG 204","NEMA SG 204","NEMA SG 204 - industrial composite",0
+"Chemical resistance: The material has good chemical resistance, which makes it suitable for use in harsh environments.","NEMA SG 204","Chemical resistance: The material has good chemical resistance, which makes it suitable for use in harsh environments. - industrial composite",0
+"GPO-1","NEMA SG 204","GPO-1 - industrial composite",0
+"GPO-2","NEMA SG 204","GPO-2 - industrial composite",0
+"GPO-3","NEMA SG 204","GPO-3 - industrial composite",0
+"SG204","NEMA SG 204","SG204 - industrial composite",0
+"HT276","NEMA SG 204","HT276 - industrial composite",0
+"Products","NEMA HT276","Products - industrial composite",0
+"Glass Fabric Laminates","NEMA HT276","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","NEMA HT276","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","NEMA HT276","Speciality Laminates - industrial composite",0
+"MICA","NEMA HT276","MICA - industrial composite",0
+"Tubes And Cylinders","NEMA HT276","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","NEMA HT276","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","NEMA HT276","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","NEMA HT276","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","NEMA HT276","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","NEMA HT276","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","NEMA HT276","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","NEMA HT276","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","NEMA HT276","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","NEMA HT276","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","NEMA HT276","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","NEMA HT276","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","NEMA HT276","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","NEMA HT276","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","NEMA HT276","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","NEMA HT276","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","NEMA HT276","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","NEMA HT276","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","NEMA HT276","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","NEMA HT276","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","NEMA HT276","Magnetic Laminates - industrial composite",0
+"MICA Tubes","NEMA HT276","MICA Tubes - industrial composite",0
+"MICA Sheet","NEMA HT276","MICA Sheet - industrial composite",0
+"MICA Paper","NEMA HT276","MICA Paper - industrial composite",0
+"MICA Tape","NEMA HT276","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","NEMA HT276","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","NEMA HT276","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","NEMA HT276","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","NEMA HT276","Calcinied MICA Tape - industrial composite",0
+"Glass Matte Laminates |","NEMA HT276","Glass Matte Laminates | - industrial composite",0
+"NEMA HT276","NEMA HT276","NEMA HT276 - industrial composite",0
+"GPO-1","NEMA HT276","GPO-1 - industrial composite",0
+"GPO-2","NEMA HT276","GPO-2 - industrial composite",0
+"GPO-3","NEMA HT276","GPO-3 - industrial composite",0
+"SG204","NEMA HT276","SG204 - industrial composite",0
+"HT276","NEMA HT276","HT276 - industrial composite",0
+"Products","NEMA P1","Products - industrial composite",0
+"Glass Fabric Laminates","NEMA P1","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","NEMA P1","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","NEMA P1","Speciality Laminates - industrial composite",0
+"MICA","NEMA P1","MICA - industrial composite",0
+"Tubes And Cylinders","NEMA P1","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","NEMA P1","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","NEMA P1","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","NEMA P1","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","NEMA P1","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","NEMA P1","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","NEMA P1","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","NEMA P1","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","NEMA P1","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","NEMA P1","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","NEMA P1","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","NEMA P1","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","NEMA P1","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","NEMA P1","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","NEMA P1","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","NEMA P1","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","NEMA P1","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","NEMA P1","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","NEMA P1","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","NEMA P1","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","NEMA P1","Magnetic Laminates - industrial composite",0
+"MICA Tubes","NEMA P1","MICA Tubes - industrial composite",0
+"MICA Sheet","NEMA P1","MICA Sheet - industrial composite",0
+"MICA Paper","NEMA P1","MICA Paper - industrial composite",0
+"MICA Tape","NEMA P1","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","NEMA P1","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","NEMA P1","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","NEMA P1","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","NEMA P1","Calcinied MICA Tape - industrial composite",0
+"NEMA P1","NEMA P1","NEMA P1 - industrial composite",0
+"Automotive industry: The material is used in the production of brake pads and other automotive components.","NEMA P1","Automotive industry: The material is used in the production of brake pads and other automotive components. - industrial composite",0
+"GPO-1","NEMA P1","GPO-1 - industrial composite",0
+"GPO-2","NEMA P1","GPO-2 - industrial composite",0
+"GPO-3","NEMA P1","GPO-3 - industrial composite",0
+"SG204","NEMA P1","SG204 - industrial composite",0
+"Products","NEMA P2","Products - industrial composite",0
+"Glass Fabric Laminates","NEMA P2","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","NEMA P2","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","NEMA P2","Speciality Laminates - industrial composite",0
+"MICA","NEMA P2","MICA - industrial composite",0
+"Tubes And Cylinders","NEMA P2","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","NEMA P2","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","NEMA P2","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","NEMA P2","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","NEMA P2","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","NEMA P2","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","NEMA P2","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","NEMA P2","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","NEMA P2","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","NEMA P2","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","NEMA P2","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","NEMA P2","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","NEMA P2","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","NEMA P2","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","NEMA P2","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","NEMA P2","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","NEMA P2","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","NEMA P2","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","NEMA P2","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","NEMA P2","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","NEMA P2","Magnetic Laminates - industrial composite",0
+"MICA Tubes","NEMA P2","MICA Tubes - industrial composite",0
+"MICA Sheet","NEMA P2","MICA Sheet - industrial composite",0
+"MICA Paper","NEMA P2","MICA Paper - industrial composite",0
+"MICA Tape","NEMA P2","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","NEMA P2","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","NEMA P2","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","NEMA P2","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","NEMA P2","Calcinied MICA Tape - industrial composite",0
+"NEMA P2","NEMA P2","NEMA P2 - industrial composite",0
+"GPO-1","NEMA P2","GPO-1 - industrial composite",0
+"GPO-2","NEMA P2","GPO-2 - industrial composite",0
+"GPO-3","NEMA P2","GPO-3 - industrial composite",0
+"SG204","NEMA P2","SG204 - industrial composite",0
+"Products","NEMA P3","Products - industrial composite",0
+"Glass Fabric Laminates","NEMA P3","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","NEMA P3","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","NEMA P3","Speciality Laminates - industrial composite",0
+"MICA","NEMA P3","MICA - industrial composite",0
+"Tubes And Cylinders","NEMA P3","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","NEMA P3","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","NEMA P3","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","NEMA P3","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","NEMA P3","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","NEMA P3","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","NEMA P3","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","NEMA P3","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","NEMA P3","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","NEMA P3","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","NEMA P3","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","NEMA P3","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","NEMA P3","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","NEMA P3","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","NEMA P3","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","NEMA P3","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","NEMA P3","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","NEMA P3","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","NEMA P3","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","NEMA P3","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","NEMA P3","Magnetic Laminates - industrial composite",0
+"MICA Tubes","NEMA P3","MICA Tubes - industrial composite",0
+"MICA Sheet","NEMA P3","MICA Sheet - industrial composite",0
+"MICA Paper","NEMA P3","MICA Paper - industrial composite",0
+"MICA Tape","NEMA P3","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","NEMA P3","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","NEMA P3","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","NEMA P3","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","NEMA P3","Calcinied MICA Tape - industrial composite",0
+"NEMA P3","NEMA P3","NEMA P3 - industrial composite",0
+"GPO-1","NEMA P3","GPO-1 - industrial composite",0
+"GPO-2","NEMA P3","GPO-2 - industrial composite",0
+"GPO-3","NEMA P3","GPO-3 - industrial composite",0
+"SG204","NEMA P3","SG204 - industrial composite",0
+"Products","NEMA P4","Products - industrial composite",0
+"Glass Fabric Laminates","NEMA P4","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","NEMA P4","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","NEMA P4","Speciality Laminates - industrial composite",0
+"MICA","NEMA P4","MICA - industrial composite",0
+"Tubes And Cylinders","NEMA P4","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","NEMA P4","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","NEMA P4","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","NEMA P4","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","NEMA P4","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","NEMA P4","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","NEMA P4","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","NEMA P4","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","NEMA P4","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","NEMA P4","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","NEMA P4","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","NEMA P4","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","NEMA P4","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","NEMA P4","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","NEMA P4","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","NEMA P4","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","NEMA P4","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","NEMA P4","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","NEMA P4","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","NEMA P4","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","NEMA P4","Magnetic Laminates - industrial composite",0
+"MICA Tubes","NEMA P4","MICA Tubes - industrial composite",0
+"MICA Sheet","NEMA P4","MICA Sheet - industrial composite",0
+"MICA Paper","NEMA P4","MICA Paper - industrial composite",0
+"MICA Tape","NEMA P4","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","NEMA P4","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","NEMA P4","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","NEMA P4","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","NEMA P4","Calcinied MICA Tape - industrial composite",0
+"NEMA P4","NEMA P4","NEMA P4 - industrial composite",0
+"GPO-1","NEMA P4","GPO-1 - industrial composite",0
+"GPO-2","NEMA P4","GPO-2 - industrial composite",0
+"GPO-3","NEMA P4","GPO-3 - industrial composite",0
+"SG204","NEMA P4","SG204 - industrial composite",0
+"Products","F2","Products - industrial composite",0
+"Glass Fabric Laminates","F2","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","F2","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","F2","Speciality Laminates - industrial composite",0
+"MICA","F2","MICA - industrial composite",0
+"Tubes And Cylinders","F2","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","F2","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","F2","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","F2","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","F2","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","F2","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","F2","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","F2","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","F2","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","F2","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","F2","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","F2","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","F2","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","F2","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","F2","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","F2","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","F2","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","F2","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","F2","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","F2","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","F2","Magnetic Laminates - industrial composite",0
+"MICA Tubes","F2","MICA Tubes - industrial composite",0
+"MICA Sheet","F2","MICA Sheet - industrial composite",0
+"MICA Paper","F2","MICA Paper - industrial composite",0
+"MICA Tape","F2","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","F2","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","F2","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","F2","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","F2","Calcinied MICA Tape - industrial composite",0
+"Agriculture: Cotton Based F2 can be used in agriculture to produce higher yielding and disease-resistant cotton crops.","F2","Agriculture: Cotton Based F2 can be used in agriculture to produce higher yielding and disease-resistant cotton crops. - industrial composite",0
+"Products","F3","Products - industrial composite",0
+"Glass Fabric Laminates","F3","Glass Fabric Laminates - industrial composite",0
+"Glass Matte Laminates","F3","Glass Matte Laminates - industrial composite",0
+"Speciality Laminates","F3","Speciality Laminates - industrial composite",0
+"MICA","F3","MICA - industrial composite",0
+"Tubes And Cylinders","F3","Tubes And Cylinders - industrial composite",0
+"Threaded Rods","F3","Threaded Rods - industrial composite",0
+"FR4 / EPGC 202","F3","FR4 / EPGC 202 - industrial composite",0
+"G10 / EPGC 201","F3","G10 / EPGC 201 - industrial composite",0
+"G11 / EPGC 202","F3","G11 / EPGC 202 - industrial composite",0
+"G7 / SIGC 202","F3","G7 / SIGC 202 - industrial composite",0
+"G30 / PFGC 301","F3","G30 / PFGC 301 - industrial composite",0
+"GPO1 / UPGM 201","F3","GPO1 / UPGM 201 - industrial composite",0
+"GPO2 / UPGM 202","F3","GPO2 / UPGM 202 - industrial composite",0
+"GPO3 / UPGM 203","F3","GPO3 / UPGM 203 - industrial composite",0
+"SG204 / GPO1","F3","SG204 / GPO1 - industrial composite",0
+"HT276 / UPGM 204/205","F3","HT276 / UPGM 204/205 - industrial composite",0
+"P1 / PF CP 201","F3","P1 / PF CP 201 - industrial composite",0
+"P2 / PF CP 207","F3","P2 / PF CP 207 - industrial composite",0
+"P3 / PF CP 203","F3","P3 / PF CP 203 - industrial composite",0
+"P4 / PF CP 204","F3","P4 / PF CP 204 - industrial composite",0
+"F2 / PF CC 202 / 305","F3","F2 / PF CC 202 / 305 - industrial composite",0
+"F3 / PF CC 203","F3","F3 / PF CC 203 - industrial composite",0
+"F4 / PF CC 204","F3","F4 / PF CC 204 - industrial composite",0
+"F5 / PF CC 204","F3","F5 / PF CC 204 - industrial composite",0
+"Magnetic Laminates","F3","Magnetic Laminates - industrial composite",0
+"MICA Tubes","F3","MICA Tubes - industrial composite",0
+"MICA Sheet","F3","MICA Sheet - industrial composite",0
+"MICA Paper","F3","MICA Paper - industrial composite",0
+"MICA Tape","F3","MICA Tape - industrial composite",0
+"Synthetic MICA Tape","F3","Synthetic MICA Tape - industrial composite",0
+"Muscovite MICA Tape","F3","Muscovite MICA Tape - industrial composite",0
+"Phlogophite MICA Tape","F3","Phlogophite MICA Tape - industrial composite",0
+"Calcinied MICA Tape","F3","Calcinied MICA Tape - industrial composite",0
+"Automotive: Cotton Molded Rod F3 composites are used in car body panels, suspension components, and brake components.","F3","Automotive: Cotton Molded Rod F3 composites are used in car body panels, suspension components, and brake components. - industrial composite",0
+"Industrial: Cotton Molded Rod F3 composites are used in industrial applications such as pumps, valves, and bearings.","F3","Industrial: Cotton Molded Rod F3 composites are used in industrial applications such as pumps, valves, and bearings. - industrial composite",0
