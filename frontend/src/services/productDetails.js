@@ -44,7 +44,3 @@ export const createPrice = async (price) => {
   return data;
 };
 
-export const createQuotation = async (quotationData) => {
-  const { data } = await api.post('/quotation', quotationData);
-  return data;
-};

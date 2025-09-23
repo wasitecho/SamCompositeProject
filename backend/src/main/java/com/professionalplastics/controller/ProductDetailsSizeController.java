@@ -3,9 +3,13 @@ package com.professionalplastics.controller;
 import com.professionalplastics.dtos.ProductDetailsSizeDTO;
 import com.professionalplastics.entity.ProductDetailsSize;
 import com.professionalplastics.repository.ProductDetailsSizeRepository;
+import com.professionalplastics.repository.ProductPriceRepository;
+import com.professionalplastics.repository.FullSheetsQuotationRepository;
+import com.professionalplastics.repository.CutToSizeQuotationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -20,6 +24,15 @@ public class ProductDetailsSizeController {
 
     @Autowired
     private ProductDetailsSizeRepository sizeRepository;
+
+    @Autowired
+    private ProductPriceRepository priceRepository;
+
+    @Autowired
+    private FullSheetsQuotationRepository fullSheetsQuotationRepository;
+
+    @Autowired
+    private CutToSizeQuotationRepository cutToSizeQuotationRepository;
 
     @PostMapping
     public ResponseEntity<Map<String, Object>> addSize(@RequestBody Map<String, Object> request) {
@@ -99,6 +112,7 @@ public class ProductDetailsSizeController {
      * DELETE /product-size/{id} - delete a size by id
      */
     @DeleteMapping("/{id}")
+    @Transactional
     public ResponseEntity<Map<String, Object>> deleteSize(@PathVariable Long id) {
         try {
             if (!sizeRepository.existsById(id)) {
@@ -108,6 +122,22 @@ public class ProductDetailsSizeController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
             }
             
+            // Delete in proper order to avoid foreign key constraint violations
+            // 1. First delete all quotations that reference this size
+            fullSheetsQuotationRepository.deleteAll(
+                fullSheetsQuotationRepository.findAll().stream()
+                    .filter(q -> q.getSizeEntity().getId().equals(id))
+                    .collect(Collectors.toList())
+            );
+            
+            // 2. Then delete all product prices that reference this size
+            priceRepository.deleteAll(
+                priceRepository.findAll().stream()
+                    .filter(p -> p.getSize().getId().equals(id))
+                    .collect(Collectors.toList())
+            );
+            
+            // 3. Finally delete the size
             sizeRepository.deleteById(id);
             
             Map<String, Object> response = new HashMap<>();
@@ -127,10 +157,22 @@ public class ProductDetailsSizeController {
      * DELETE /product-size - delete all sizes
      */
     @DeleteMapping
+    @Transactional
     public ResponseEntity<Map<String, Object>> deleteAllSizes() {
         try {
             long countBefore = sizeRepository.count();
+            
+            // Delete in proper order to avoid foreign key constraint violations
+            // 1. First delete all quotations that reference sizes
+            fullSheetsQuotationRepository.deleteAll();
+            cutToSizeQuotationRepository.deleteAll();
+            
+            // 2. Then delete all product prices
+            priceRepository.deleteAll();
+            
+            // 3. Finally delete all sizes
             sizeRepository.deleteAll();
+            
             long countAfter = sizeRepository.count();
             
             Map<String, Object> response = new HashMap<>();

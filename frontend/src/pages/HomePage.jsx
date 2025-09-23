@@ -42,11 +42,11 @@ function HomePage() {
                 Trusted by 500+ Companies
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 bg-gradient-to-r from-white via-blue-100 to-cyan-200 bg-clip-text text-transparent">
-                Industrial Plastics Solutions
+              The Backbone For Those Who
+              Build The World
               </h1>
               <p className="text-blue-100/90 text-lg lg:text-xl mb-8 max-w-2xl leading-relaxed">
-                Professional-grade plastics for manufacturing, construction, and industrial applications. 
-                Quality materials, reliable service, exceptional results.
+                   We are the leading manufactures of advanced composites for the world builders for the last 30 years
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/products" className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 hover:bg-blue-50 px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">

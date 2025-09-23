@@ -1,133 +1,313 @@
 package com.professionalplastics.controller;
 
-import com.professionalplastics.dtos.ProductPriceDTO;
-import com.professionalplastics.repository.ProductPriceRepository;
+import com.professionalplastics.dtos.*;
+import com.professionalplastics.entity.*;
+import com.professionalplastics.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/quotation")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/quotations")
+@CrossOrigin(origins = "http://localhost:5173")
 public class QuotationController {
+
+    @Autowired
+    private FullSheetsQuotationRepository fullSheetsQuotationRepository;
+
+    @Autowired
+    private CutToSizeQuotationRepository cutToSizeQuotationRepository;
+
+    @Autowired
+    private ProductDetailsRepository productDetailsRepository;
+
+    @Autowired
+    private ProductDetailsThicknessRepository thicknessRepository;
+
+    @Autowired
+    private ProductDetailsSizeRepository sizeRepository;
 
     @Autowired
     private ProductPriceRepository productPriceRepository;
 
-    @PostMapping
-    public ResponseEntity<Map<String, Object>> createQuotation(@RequestBody Map<String, Object> quotationRequest) {
+    // Full Sheets Quotation Endpoints
+
+    @PostMapping("/full-sheets")
+    public ResponseEntity<?> createFullSheetsQuotation(@Valid @RequestBody FullSheetsQuotationRequest request) {
         try {
-            // Extract parameters from request
-            Long gradeId = Long.valueOf(quotationRequest.get("gradeId").toString());
-            String quantity = quotationRequest.get("quantity").toString();
-            String thickness = quotationRequest.get("thickness").toString();
-            String size = quotationRequest.get("size").toString();
-            String basePrice = quotationRequest.get("basePrice") != null ? quotationRequest.get("basePrice").toString() : "";
-            String totalPrice = quotationRequest.get("totalPrice") != null ? quotationRequest.get("totalPrice").toString() : "";
+            // Fetch related entities
+            Optional<ProductDetails> productDetailOpt = productDetailsRepository.findById(request.getProductDetailId());
+            Optional<ProductDetailsThickness> thicknessOpt = thicknessRepository.findById(request.getThicknessId());
+            Optional<ProductDetailsSize> sizeOpt = sizeRepository.findById(request.getSizeId());
+            Optional<ProductPrice> productPriceOpt = productPriceRepository.findById(request.getProductPriceId());
 
-            // Find the product price by grade, thickness, and size
-            List<com.professionalplastics.entity.ProductPrice> prices = productPriceRepository.findByGradeId(gradeId);
-            Optional<com.professionalplastics.entity.ProductPrice> productPriceOpt = prices.stream()
-                .filter(p -> p.getThickness().getThicknessName().equals(thickness) && 
-                           (p.getSize().getLength() + "x" + p.getSize().getBreadth()).equals(size))
-                .findFirst();
-
+            if (productDetailOpt.isEmpty()) {
+                return ResponseEntity.badRequest().body("ProductDetails not found with ID: " + request.getProductDetailId());
+            }
+            if (thicknessOpt.isEmpty()) {
+                return ResponseEntity.badRequest().body("ProductDetailsThickness not found with ID: " + request.getThicknessId());
+            }
+            if (sizeOpt.isEmpty()) {
+                return ResponseEntity.badRequest().body("ProductDetailsSize not found with ID: " + request.getSizeId());
+            }
             if (productPriceOpt.isEmpty()) {
-                Map<String, Object> errorResponse = new HashMap<>();
-                errorResponse.put("success", false);
-                errorResponse.put("message", "Product price not found for the selected specifications");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+                return ResponseEntity.badRequest().body("ProductPrice not found with ID: " + request.getProductPriceId());
             }
 
-            com.professionalplastics.entity.ProductPrice productPrice = productPriceOpt.get();
-
-            // Create ProductPriceDTO for response
-            ProductPriceDTO priceDTO = new ProductPriceDTO(
-                productPrice.getId(),
-                productPrice.getProductDetail().getId(),
-                productPrice.getThickness().getId(),
-                productPrice.getSize().getId(),
-                productPrice.getPrice(),
-                productPrice.getThickness().getThicknessName(),
-                productPrice.getSize().getLength(),
-                productPrice.getSize().getBreadth()
+            // Create quotation entity
+            FullSheetsQuotation quotation = new FullSheetsQuotation(
+                request.getSeries(),
+                request.getThickness(),
+                request.getSize(),
+                request.getQuantity(),
+                request.getBasePrice(),
+                request.getTotalPrice(),
+                productDetailOpt.get(),
+                thicknessOpt.get(),
+                sizeOpt.get(),
+                productPriceOpt.get()
             );
 
-            // Create quotation response
-            Map<String, Object> quotationResponse = new HashMap<>();
-            quotationResponse.put("success", true);
-            quotationResponse.put("message", "Quotation generated successfully");
-            quotationResponse.put("quotationId", "QUO-" + System.currentTimeMillis());
-            quotationResponse.put("quantity", quantity);
-            quotationResponse.put("productPrice", priceDTO);
-            quotationResponse.put("basePrice", basePrice);
-            quotationResponse.put("unitPrice", productPrice.getPrice());
-            quotationResponse.put("totalPrice", totalPrice);
-            quotationResponse.put("timestamp", System.currentTimeMillis());
+            FullSheetsQuotation savedQuotation = fullSheetsQuotationRepository.save(quotation);
 
-            return ResponseEntity.ok(quotationResponse);
+            // Create response
+            FullSheetsQuotationResponse response = new FullSheetsQuotationResponse(
+                savedQuotation.getId(),
+                savedQuotation.getSeries(),
+                savedQuotation.getThickness(),
+                savedQuotation.getSize(),
+                savedQuotation.getQuantity(),
+                savedQuotation.getBasePrice(),
+                savedQuotation.getTotalPrice(),
+                savedQuotation.getCreatedAt(),
+                productDetailOpt.get().getGrade().getTypeCode()
+            );
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("success", false);
-            errorResponse.put("message", "Failed to generate quotation: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error creating full sheets quotation: " + e.getMessage());
         }
     }
 
-    /**
-     * DELETE /quotation/{id} - delete a quotation by id
-     * Note: This is a placeholder method since quotations are typically not stored persistently
-     * but generated on-demand. This method could be used if quotations are stored in a database.
-     */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> deleteQuotation(@PathVariable String id) {
+    @GetMapping("/full-sheets")
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> getAllFullSheetsQuotations() {
         try {
-            // Since quotations are typically generated on-demand and not stored,
-            // this method returns a success response indicating the quotation is "deleted"
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("message", "Quotation " + id + " deleted successfully");
-            response.put("note", "Quotations are generated on-demand and not stored persistently");
+            List<FullSheetsQuotation> quotations = fullSheetsQuotationRepository.findAllWithGrade();
             
-            return ResponseEntity.ok(response);
+            List<FullSheetsQuotationResponse> responses = quotations.stream()
+                .map(q -> new FullSheetsQuotationResponse(
+                    q.getId(),
+                    q.getSeries(),
+                    q.getThickness(),
+                    q.getSize(),
+                    q.getQuantity(),
+                    q.getBasePrice(),
+                    q.getTotalPrice(),
+                    q.getCreatedAt(),
+                    q.getProductDetail().getGrade().getTypeCode()
+                ))
+                .collect(Collectors.toList());
+
+            return ResponseEntity.ok(responses);
         } catch (Exception e) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("success", false);
-            errorResponse.put("message", "Failed to delete quotation: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error fetching full sheets quotations: " + e.getMessage());
         }
     }
 
-    /**
-     * DELETE /quotation - delete all quotations
-     * Note: This is a placeholder method since quotations are typically not stored persistently
-     * but generated on-demand. This method could be used if quotations are stored in a database.
-     */
-    @DeleteMapping
-    public ResponseEntity<Map<String, Object>> deleteAllQuotations() {
+    // Cut-to-Size Quotation Endpoints
+
+    @PostMapping("/cut-to-size")
+    public ResponseEntity<?> createCutToSizeQuotation(@Valid @RequestBody CutToSizeQuotationRequest request) {
         try {
-            // Since quotations are typically generated on-demand and not stored,
-            // this method returns a success response indicating all quotations are "deleted"
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("message", "All quotations deleted successfully");
-            response.put("note", "Quotations are generated on-demand and not stored persistently");
-            response.put("deletedCount", 0);
-            response.put("remainingCount", 0);
-            
-            return ResponseEntity.ok(response);
+            // Fetch related entities
+            Optional<ProductDetails> productDetailOpt = productDetailsRepository.findById(request.getProductDetailId());
+            Optional<ProductPrice> productPriceOpt = productPriceRepository.findById(request.getProductPriceId());
+
+            if (productDetailOpt.isEmpty() || productPriceOpt.isEmpty()) {
+                return ResponseEntity.badRequest().body("One or more related entities not found");
+            }
+
+            // Create quotation entity
+            CutToSizeQuotation quotation = new CutToSizeQuotation(
+                request.getSeries(),
+                request.getThickness(),
+                request.getSizeFullSheet(),
+                request.getCutLength(),
+                request.getCutWidth(),
+                request.getMachiningCost(),
+                request.getCutSizeArea(),
+                request.getQuantityPerSheet(),
+                request.getNumFullSheetsRequired(),
+                request.getQuantity(),
+                request.getBasePriceFullSheet(),
+                request.getCutToSizePricePerUnit(),
+                request.getTotalCalculatedPrice(),
+                productDetailOpt.get(),
+                productPriceOpt.get()
+            );
+
+            CutToSizeQuotation savedQuotation = cutToSizeQuotationRepository.save(quotation);
+
+            // Create response
+            CutToSizeQuotationResponse response = new CutToSizeQuotationResponse(
+                savedQuotation.getId(),
+                savedQuotation.getSeries(),
+                savedQuotation.getThickness(),
+                savedQuotation.getSizeFullSheet(),
+                savedQuotation.getCutLength(),
+                savedQuotation.getCutWidth(),
+                savedQuotation.getMachiningCost(),
+                savedQuotation.getCutSizeArea(),
+                savedQuotation.getQuantityPerSheet(),
+                savedQuotation.getNumFullSheetsRequired(),
+                savedQuotation.getQuantity(),
+                savedQuotation.getBasePriceFullSheet(),
+                savedQuotation.getCutToSizePricePerUnit(),
+                savedQuotation.getTotalCalculatedPrice(),
+                savedQuotation.getCreatedAt(),
+                productDetailOpt.get().getGrade().getTypeCode()
+            );
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("success", false);
-            errorResponse.put("message", "Failed to delete all quotations: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error creating cut-to-size quotation: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/cut-to-size")
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> getAllCutToSizeQuotations() {
+        try {
+            List<CutToSizeQuotation> quotations = cutToSizeQuotationRepository.findAllWithGrade();
+            
+            List<CutToSizeQuotationResponse> responses = quotations.stream()
+                .map(q -> new CutToSizeQuotationResponse(
+                    q.getId(),
+                    q.getSeries(),
+                    q.getThickness(),
+                    q.getSizeFullSheet(),
+                    q.getCutLength(),
+                    q.getCutWidth(),
+                    q.getMachiningCost(),
+                    q.getCutSizeArea(),
+                    q.getQuantityPerSheet(),
+                    q.getNumFullSheetsRequired(),
+                    q.getQuantity(),
+                    q.getBasePriceFullSheet(),
+                    q.getCutToSizePricePerUnit(),
+                    q.getTotalCalculatedPrice(),
+                    q.getCreatedAt(),
+                    q.getProductDetail().getGrade().getTypeCode()
+                ))
+                .collect(Collectors.toList());
+
+            return ResponseEntity.ok(responses);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error fetching cut-to-size quotations: " + e.getMessage());
+        }
+    }
+
+    // Generic endpoint to get quotation by ID (works for both types)
+    @GetMapping("/{id}")
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> getQuotationById(@PathVariable Long id) {
+        try {
+            // Try full sheets first
+            Optional<FullSheetsQuotation> fullSheetsOpt = fullSheetsQuotationRepository.findByIdWithGrade(id);
+            if (fullSheetsOpt.isPresent()) {
+                FullSheetsQuotation q = fullSheetsOpt.get();
+                FullSheetsQuotationResponse response = new FullSheetsQuotationResponse(
+                    q.getId(),
+                    q.getSeries(),
+                    q.getThickness(),
+                    q.getSize(),
+                    q.getQuantity(),
+                    q.getBasePrice(),
+                    q.getTotalPrice(),
+                    q.getCreatedAt(),
+                    q.getProductDetail().getGrade().getTypeCode()
+                );
+                return ResponseEntity.ok(response);
+            }
+
+            // Try cut-to-size
+            Optional<CutToSizeQuotation> cutToSizeOpt = cutToSizeQuotationRepository.findByIdWithGrade(id);
+            if (cutToSizeOpt.isPresent()) {
+                CutToSizeQuotation q = cutToSizeOpt.get();
+                CutToSizeQuotationResponse response = new CutToSizeQuotationResponse(
+                    q.getId(),
+                    q.getSeries(),
+                    q.getThickness(),
+                    q.getSizeFullSheet(),
+                    q.getCutLength(),
+                    q.getCutWidth(),
+                    q.getMachiningCost(),
+                    q.getCutSizeArea(),
+                    q.getQuantityPerSheet(),
+                    q.getNumFullSheetsRequired(),
+                    q.getQuantity(),
+                    q.getBasePriceFullSheet(),
+                    q.getCutToSizePricePerUnit(),
+                    q.getTotalCalculatedPrice(),
+                    q.getCreatedAt(),
+                    q.getProductDetail().getGrade().getTypeCode()
+                );
+                return ResponseEntity.ok(response);
+            }
+
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error fetching quotation: " + e.getMessage());
+        }
+    }
+
+    // Delete all quotations endpoints
+
+    @DeleteMapping("/full-sheets/all")
+    @Transactional
+    public ResponseEntity<?> deleteAllFullSheetsQuotations() {
+        try {
+            long count = fullSheetsQuotationRepository.count();
+            fullSheetsQuotationRepository.deleteAll();
+            
+            return ResponseEntity.ok(Map.of(
+                "message", "All full sheets quotations deleted successfully",
+                "deletedCount", count
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error deleting all full sheets quotations: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/cut-to-size/all")
+    @Transactional
+    public ResponseEntity<?> deleteAllCutToSizeQuotations() {
+        try {
+            long count = cutToSizeQuotationRepository.count();
+            cutToSizeQuotationRepository.deleteAll();
+            
+            return ResponseEntity.ok(Map.of(
+                "message", "All cut-to-size quotations deleted successfully",
+                "deletedCount", count
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error deleting all cut-to-size quotations: " + e.getMessage());
         }
     }
 }
-

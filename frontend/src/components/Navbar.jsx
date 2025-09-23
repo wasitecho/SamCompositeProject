@@ -91,6 +91,9 @@ function Navbar() {
               <NavLink to="/cart" className={({ isActive }) => `${baseLink} ${isActive ? activeLink : inactiveLink}`}>
                 Cart
               </NavLink>
+              <NavLink to="/quotations-history" className={({ isActive }) => `${baseLink} ${isActive ? activeLink : inactiveLink}`}>
+                Quotations History
+              </NavLink>
               <NavLink to="/contact" className={({ isActive }) => `${baseLink} ${isActive ? activeLink : inactiveLink}`}>
                 Contact
               </NavLink>
@@ -137,6 +140,9 @@ function Navbar() {
               </NavLink>
               <NavLink to="/cart" onClick={() => setOpen(false)} className={({ isActive }) => `${baseLink} ${isActive ? activeLink : inactiveLink}`}>
                 Cart
+              </NavLink>
+              <NavLink to="/quotations-history" onClick={() => setOpen(false)} className={({ isActive }) => `${baseLink} ${isActive ? activeLink : inactiveLink}`}>
+                Quotations History
               </NavLink>
               <NavLink to="/contact" onClick={() => setOpen(false)} className={({ isActive }) => `${baseLink} ${isActive ? activeLink : inactiveLink}`}>
                 Contact

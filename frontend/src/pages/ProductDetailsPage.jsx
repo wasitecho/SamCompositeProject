@@ -3,7 +3,6 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import api from '../services/api';
 import { 
   fetchProductDetailsByGrade, 
-  createQuotation, 
   createProductDetails,
   fetchThicknesses,
   createThickness,
@@ -13,6 +12,7 @@ import {
   createPrice
 } from '../services/productDetails';
 import { addToCart } from '../services/cart';
+import { createFullSheetsQuotation, createCutToSizeQuotation } from '../services/quotations';
 
 function useQuery() {
   const { search } = useLocation();
@@ -59,6 +59,10 @@ function ProductDetailsPage() {
   const [showFullSheetModal, setShowFullSheetModal] = useState(false);
   const [showAddToCartModal, setShowAddToCartModal] = useState(false);
   const [cartMessage, setCartMessage] = useState('');
+  
+  // Quotation saving states
+  const [savingQuotation, setSavingQuotation] = useState(false);
+  const [quotationMessage, setQuotationMessage] = useState('');
 
   // Individual modal states for each field
   const [showSeriesModal, setShowSeriesModal] = useState(false);
@@ -338,20 +342,23 @@ function ProductDetailsPage() {
     }
   }, [activeTab, quantity, quantityPerSheet]);
 
-  // Calculate Cut To Size price per unit when total price and quantity are available
+  // Calculate Cut To Size price per unit: Base Price × Number of Sheets ÷ Quantity
   useEffect(() => {
-    if (activeTab === 'cut-to-size' && calculatedPrice && quantity && parseInt(quantity) >= 1) {
-      const totalPriceNum = parseFloat(calculatedPrice);
+    if (activeTab === 'cut-to-size' && fullSheetPrice && numberOfFullSheetsRequired && quantity && parseInt(quantity) >= 1) {
+      const basePriceNum = parseFloat(fullSheetPrice);
+      const numberOfSheetsNum = parseInt(numberOfFullSheetsRequired);
       const quantityNum = parseInt(quantity);
       
-      if (!isNaN(totalPriceNum) && !isNaN(quantityNum) && quantityNum > 0) {
-        // Calculate price per unit: Total Price / Quantity
-        const pricePerUnit = totalPriceNum / quantityNum;
+      if (!isNaN(basePriceNum) && !isNaN(numberOfSheetsNum) && !isNaN(quantityNum) && quantityNum > 0) {
+        // NEW CALCULATION: Base Price × Number of Sheets ÷ Quantity
+        const pricePerUnit = (basePriceNum * numberOfSheetsNum) / quantityNum;
         setPricePerUnit(pricePerUnit.toString());
         console.log('✅ Cut-to-Size price per unit calculated:', {
-          totalPrice: totalPriceNum,
+          basePrice: basePriceNum,
+          numberOfSheets: numberOfSheetsNum,
           quantity: quantityNum,
-          pricePerUnit: pricePerUnit
+          pricePerUnit: pricePerUnit,
+          calculation: `(${basePriceNum} × ${numberOfSheetsNum}) ÷ ${quantityNum} = ${pricePerUnit}`
         });
       } else {
         setPricePerUnit('');
@@ -359,62 +366,47 @@ function ProductDetailsPage() {
     } else {
       setPricePerUnit('');
     }
-  }, [activeTab, calculatedPrice, quantity]);
+  }, [activeTab, fullSheetPrice, numberOfFullSheetsRequired, quantity]);
 
-  // Calculate total price when full sheet price and number of full sheets required are available
+  // Calculate total price: Base Price × Number of Sheets × Quantity
   useEffect(() => {
-    if (activeTab === 'cut-to-size' && fullSheetPrice && numberOfFullSheetsRequired) {
-      const fullSheetPriceNum = parseFloat(fullSheetPrice);
-      const numberOfSheetsNum = parseInt(numberOfFullSheetsRequired);
-      const machiningCostNum = machiningCost ? parseFloat(machiningCost) : 0;
-      
-      if (!isNaN(fullSheetPriceNum) && !isNaN(numberOfSheetsNum) && numberOfSheetsNum > 0) {
-        // Calculate total price: Base Price × Number of Full Sheets Required + Machining Cost
-        const baseTotal = fullSheetPriceNum * numberOfSheetsNum;
-        const totalPrice = baseTotal + machiningCostNum;
-        setCalculatedPrice(totalPrice.toString());
-        console.log('✅ Cut-to-Size total price calculated:', {
-          fullSheetPrice: fullSheetPriceNum,
-          numberOfFullSheetsRequired: numberOfSheetsNum,
-          machiningCost: machiningCostNum,
-          baseTotal: baseTotal,
-          totalPrice: totalPrice
-        });
+    if (activeTab === 'cut-to-size') {
+      if (fullSheetPrice && numberOfFullSheetsRequired && quantity) {
+        const basePriceNum = parseFloat(fullSheetPrice);
+        const numberOfSheetsNum = parseInt(numberOfFullSheetsRequired);
+        const quantityNum = parseInt(quantity);
+        
+        if (!isNaN(basePriceNum) && !isNaN(numberOfSheetsNum) && !isNaN(quantityNum) && quantityNum > 0) {
+          // NEW CALCULATION: Base Price × Number of Sheets × Quantity
+          const totalCalculatedPrice = basePriceNum * numberOfSheetsNum * quantityNum;
+          setCalculatedPrice(totalCalculatedPrice.toString());
+          
+          console.log('✅ Total Calculated Price:', {
+            basePrice: basePriceNum,
+            numberOfSheets: numberOfSheetsNum,
+            quantity: quantityNum,
+            calculation: `${basePriceNum} × ${numberOfSheetsNum} × ${quantityNum} = ${totalCalculatedPrice}`
+          });
+        } else {
+          setCalculatedPrice('');
+        }
       } else {
         setCalculatedPrice('');
       }
-    } else {
-      setCalculatedPrice('');
     }
-  }, [activeTab, fullSheetPrice, numberOfFullSheetsRequired, machiningCost]);
+  }, [activeTab, fullSheetPrice, numberOfFullSheetsRequired, quantity]);
 
-  const submitQuotation = async () => {
-    setQuoteMsg('');
-    try {
-      const payload = {
-        gradeId: id,
-        quantity,
-        thickness: selectedThickness,
-        size: selectedSize,
-        basePrice: basePrice,
-        discount: discount || '0',
-        totalPrice: totalPrice
-      };
-      const result = await createQuotation(payload);
-      if (result.success) {
-        setQuoteMsg(`Quotation generated successfully! Quotation ID: ${result.quotationId}`);
-        setShowFullSheetModal(true);
-      } else {
-        setQuoteMsg(result.message || 'Failed to generate quotation.');
-      }
-    } catch (e) {
-      setQuoteMsg('Failed to submit quotation request.');
+  const showFullSheetQuotation = () => {
+    if (totalPrice && quantity) {
+      setQuoteMsg(`Quotation generated! Total Price: ₹${parseFloat(totalPrice).toFixed(2)} for ${quantity} units`);
+      setShowFullSheetModal(true);
     }
   };
 
   const showCutSizeQuotation = () => {
     if (calculatedPrice && quantity) {
-      const totalCutSizePrice = parseFloat(calculatedPrice) * parseInt(quantity);
+      // calculatedPrice is already the total price for all required full sheets + machining cost
+      // No need to multiply by quantity again
       setShowCutSizeModal(true);
     }
   };
@@ -490,6 +482,183 @@ function ProductDetailsPage() {
     } catch (e) {
       console.error('Exception in submitAddToCart:', e);
       setCartMessage('Failed to add item to cart.');
+    }
+  };
+
+  // Save Full Sheets Quotation
+  const saveFullSheetsQuotation = async () => {
+    if (!hasProductDetails || !quantity || !selectedSeries || !selectedThickness || !selectedSize || !totalPrice) {
+      setQuotationMessage('Please fill in all required fields before saving quotation.');
+      return;
+    }
+
+    setSavingQuotation(true);
+    setQuotationMessage('');
+
+    try {
+      // Find the selected price and related entities
+      const selectedPrice = prices.find(price => {
+        if (!price || !price.thicknessName || !price.length || !price.breadth || !price.productDetailId) {
+          return false;
+        }
+        
+        const matchingProductDetail = productDetails.find(pd => 
+          pd.id === price.productDetailId && pd.series === selectedSeries
+        );
+        
+        return matchingProductDetail &&
+               price.thicknessName === selectedThickness &&
+               `${price.length}x${price.breadth}` === selectedSize;
+      });
+
+      if (!selectedPrice) {
+        setQuotationMessage('Product configuration not found. Please try again.');
+        return;
+      }
+
+      const quotationData = {
+        series: selectedSeries,
+        thickness: parseFloat(selectedThickness.replace('mm', '')),
+        size: selectedSize,
+        quantity: parseInt(quantity),
+        basePrice: parseFloat(basePrice),
+        totalPrice: parseFloat(totalPrice),
+        productDetailId: selectedPrice.productDetailId,
+        thicknessId: selectedPrice.thicknessId,
+        sizeId: selectedPrice.sizeId,
+        productPriceId: selectedPrice.id
+      };
+
+      // Validate that all required fields are present and valid
+      if (!quotationData.series || !quotationData.size || !quotationData.thickness || 
+          !quotationData.quantity || !quotationData.basePrice || !quotationData.totalPrice ||
+          !quotationData.productDetailId || !quotationData.thicknessId || 
+          !quotationData.sizeId || !quotationData.productPriceId) {
+        setQuotationMessage('Missing required data for quotation. Please try again.');
+        return;
+      }
+
+      // Validate numeric values
+      if (isNaN(quotationData.thickness) || isNaN(quotationData.basePrice) || 
+          isNaN(quotationData.totalPrice) || isNaN(quotationData.quantity)) {
+        setQuotationMessage('Invalid numeric values. Please check your inputs.');
+        return;
+      }
+
+      console.log('Sending quotation data:', quotationData);
+      console.log('Selected price object:', selectedPrice);
+      console.log('ThicknessId:', selectedPrice.thicknessId);
+      console.log('SizeId:', selectedPrice.sizeId);
+      console.log('ProductDetailId:', selectedPrice.productDetailId);
+      console.log('ProductPriceId:', selectedPrice.id);
+      
+      const result = await createFullSheetsQuotation(quotationData);
+      console.log('Quotation creation result:', result);
+      
+      if (result && result.id) {
+        setQuotationMessage(`Full sheets quotation saved successfully! Quotation ID: ${result.id}`);
+        
+        // Clear form after successful save
+        setTimeout(() => {
+          setQuotationMessage('');
+          setQuantity('');
+          setSelectedSeries('');
+          setSelectedThickness('');
+          setSelectedSize('');
+          setBasePrice('');
+          setTotalPrice('');
+        }, 3000);
+      } else {
+        console.error('Unexpected response structure:', result);
+        setQuotationMessage('Quotation saved but response format unexpected. Please check quotations history.');
+      }
+
+    } catch (error) {
+      console.error('Error saving full sheets quotation:', error);
+      setQuotationMessage('Failed to save quotation: ' + error.message);
+    } finally {
+      setSavingQuotation(false);
+    }
+  };
+
+  // Save Cut-to-Size Quotation
+  const saveCutToSizeQuotation = async () => {
+    if (!hasProductDetails || !quantity || !selectedSeries || !selectedThickness || !selectedSize || 
+        !cutLength || !cutWidth || !calculatedPrice) {
+      setQuotationMessage('Please fill in all required fields before saving quotation.');
+      return;
+    }
+
+    setSavingQuotation(true);
+    setQuotationMessage('');
+
+    try {
+      // Find the selected price and related entities
+      const selectedPrice = prices.find(price => {
+        if (!price || !price.thicknessName || !price.length || !price.breadth || !price.productDetailId) {
+          return false;
+        }
+        
+        const matchingProductDetail = productDetails.find(pd => 
+          pd.id === price.productDetailId && pd.series === selectedSeries
+        );
+        
+        return matchingProductDetail &&
+               price.thicknessName === selectedThickness &&
+               `${price.length}x${price.breadth}` === selectedSize;
+      });
+
+      if (!selectedPrice) {
+        setQuotationMessage('Product configuration not found. Please try again.');
+        return;
+      }
+
+      const quotationData = {
+        series: selectedSeries,
+        thickness: parseFloat(selectedThickness.replace('mm', '')),
+        sizeFullSheet: selectedSize,
+        cutLength: parseFloat(cutLength),
+        cutWidth: parseFloat(cutWidth),
+        machiningCost: parseFloat(machiningCost || 0),
+        cutSizeArea: parseFloat(cutSizeArea),
+        quantityPerSheet: parseInt(quantityPerSheet),
+        numFullSheetsRequired: parseInt(numberOfFullSheetsRequired),
+        quantity: parseInt(quantity),
+        basePriceFullSheet: parseFloat(fullSheetPrice),
+        cutToSizePricePerUnit: parseFloat(pricePerUnit),
+        totalCalculatedPrice: parseFloat(calculatedPrice),
+        productDetailId: selectedPrice.productDetailId,
+        productPriceId: selectedPrice.id
+      };
+
+      console.log('Sending cut-to-size quotation data:', quotationData);
+      const result = await createCutToSizeQuotation(quotationData);
+      console.log('Cut-to-size quotation creation result:', result);
+      
+      if (result && result.id) {
+        setQuotationMessage(`Cut-to-size quotation saved successfully! Quotation ID: ${result.id}`);
+        
+        // Clear form after successful save
+        setTimeout(() => {
+          setQuotationMessage('');
+          setQuantity('');
+          setSelectedSeries('');
+          setSelectedThickness('');
+          setSelectedSize('');
+          setCutLength('');
+          setCutWidth('');
+          setCalculatedPrice('');
+        }, 3000);
+      } else {
+        console.error('Unexpected response structure:', result);
+        setQuotationMessage('Quotation saved but response format unexpected. Please check quotations history.');
+      }
+
+    } catch (error) {
+      console.error('Error saving cut-to-size quotation:', error);
+      setQuotationMessage('Failed to save quotation: ' + error.message);
+    } finally {
+      setSavingQuotation(false);
     }
   };
 
@@ -956,7 +1125,7 @@ function ProductDetailsPage() {
             <div className="d-flex flex-column gap-2">
               <button 
                 className="btn btn-primary w-100 w-md-auto" 
-                onClick={submitQuotation} 
+                onClick={showFullSheetQuotation} 
                 disabled={!hasProductDetails || !quantity || !selectedSeries || !selectedThickness || !selectedSize || !totalPrice}
               >
                 Get Quotation
@@ -968,8 +1137,16 @@ function ProductDetailsPage() {
               >
                 Add to Cart
               </button>
+              <button 
+                className="btn btn-info w-100 w-md-auto" 
+                onClick={saveFullSheetsQuotation} 
+                disabled={!hasProductDetails || !quantity || !selectedSeries || !selectedThickness || !selectedSize || !totalPrice || savingQuotation}
+              >
+                {savingQuotation ? 'Saving...' : 'Save Quotation'}
+              </button>
             </div>
             {quoteMsg && <div className="small mt-2 text-muted">{quoteMsg}</div>}
+            {quotationMessage && <div className={`small mt-2 ${quotationMessage.includes('successfully') ? 'text-success' : 'text-danger'}`}>{quotationMessage}</div>}
           </div>
         </div>
       )}
@@ -1203,7 +1380,15 @@ function ProductDetailsPage() {
               >
                 Add to Cart
               </button>
+              <button 
+                className="btn btn-info w-100 w-md-auto" 
+                onClick={saveCutToSizeQuotation} 
+                disabled={!hasProductDetails || !quantity || !selectedSeries || !selectedThickness || !selectedSize || !cutLength || !cutWidth || !calculatedPrice || savingQuotation}
+              >
+                {savingQuotation ? 'Saving...' : 'Save Quotation'}
+              </button>
             </div>
+            {quotationMessage && <div className={`small mt-2 ${quotationMessage.includes('successfully') ? 'text-success' : 'text-danger'}`}>{quotationMessage}</div>}
           </div>
         </div>
       )}
@@ -1528,10 +1713,11 @@ function ProductDetailsPage() {
                       • Cut Size Area: {cutLength} × {cutWidth} = {cutSizeArea} sq units<br/>
                       • Quantity per Sheet: {quantityPerSheet} pieces (from {selectedSize} full sheet)<br/>
                       • Number of Full Sheets Required: {numberOfFullSheetsRequired} sheets<br/>
-                      • Base Total: {fullSheetPrice} × {numberOfFullSheetsRequired} = {(parseFloat(fullSheetPrice) * parseInt(numberOfFullSheetsRequired)).toFixed(2)}<br/>
-                      • Machining Cost: {machiningCost ? parseFloat(machiningCost).toFixed(2) : '0.00'}<br/>
-                      • Total Price: {(parseFloat(fullSheetPrice) * parseInt(numberOfFullSheetsRequired)).toFixed(2)} + {machiningCost ? parseFloat(machiningCost).toFixed(2) : '0.00'} = {parseFloat(calculatedPrice).toFixed(2)}<br/>
-                      • Cut-to-Size Price Per Unit: {parseFloat(calculatedPrice).toFixed(2)} ÷ {quantity} = {parseFloat(pricePerUnit).toFixed(2)}
+                      • Base Price: {fullSheetPrice}<br/>
+                      • Number of Full Sheets Required: {numberOfFullSheetsRequired}<br/>
+                      • Quantity: {quantity}<br/>
+                      • Total Calculated Price: {fullSheetPrice} × {numberOfFullSheetsRequired} × {quantity} = {parseFloat(calculatedPrice).toFixed(2)}<br/>
+                      • Cut-to-Size Price Per Unit: {fullSheetPrice} × {numberOfFullSheetsRequired} ÷ {quantity} = {parseFloat(pricePerUnit).toFixed(2)}
                     </small>
                   </div>
                 </div>

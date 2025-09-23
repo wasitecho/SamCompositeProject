@@ -12,6 +12,7 @@ import CategoryPage from './pages/CategoryPage';
 import CategoriesPage from './pages/CategoriesPage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
 import CartPage from './pages/CartPage';
+import QuotationsHistoryPage from './pages/QuotationsHistoryPage';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/add-product" element={<AddProductPage />} />
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/quotations-history" element={<QuotationsHistoryPage />} />
             <Route path="/contact" element={<ContactPage />} />
           </Routes>
         </div>
