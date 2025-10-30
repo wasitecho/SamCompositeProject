@@ -11,6 +11,11 @@ export const createProductDetails = async (productDetails) => {
   return data;
 };
 
+export const updateProductDetails = async (id, productDetails) => {
+  const { data } = await api.put(`/product-details/${id}`, productDetails);
+  return data;
+};
+
 // Product Thickness
 export const fetchThicknesses = async () => {
   const { data } = await api.get('/product-thickness');
@@ -44,3 +49,7 @@ export const createPrice = async (price) => {
   return data;
 };
 
+export const updatePrice = async (id, updatedPrice) => {
+  const { data } = await api.put(`/product-price/${id}`, updatedPrice);
+  return data;
+};

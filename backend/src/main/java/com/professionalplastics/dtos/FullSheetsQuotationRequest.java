@@ -140,4 +140,20 @@ public class FullSheetsQuotationRequest {
     public void setProductPriceId(Long productPriceId) {
         this.productPriceId = productPriceId;
     }
+
+    @Override
+    public String toString() {
+        return "FullSheetsQuotationRequest{" +
+                "series='" + series + '\'' +
+                ", thickness=" + thickness +
+                ", size='" + size + '\'' +
+                ", quantity=" + quantity +
+                ", basePrice=" + basePrice +
+                ", totalPrice=" + totalPrice +
+                ", productDetailId=" + productDetailId +
+                ", thicknessId=" + thicknessId +
+                ", sizeId=" + sizeId +
+                ", productPriceId=" + productPriceId +
+                '}';
+    }
 }

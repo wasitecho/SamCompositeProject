@@ -28,6 +28,13 @@ public interface ProductDetailsRepository extends JpaRepository<ProductDetails, 
     // Check if series already exists for a grade
     boolean existsByGradeIdAndSeries(Long gradeId, String series);
     
+    // Check if series already exists for a grade excluding current record
+    boolean existsByGradeIdAndSeriesAndIdNot(Long gradeId, String series, Long id);
+    
     // Find product details by series and grade
     Optional<ProductDetails> findByGradeIdAndSeries(Long gradeId, String series);
+    
+    // Find product details by ID with grade eagerly loaded
+    @Query("SELECT pd FROM ProductDetails pd JOIN FETCH pd.grade WHERE pd.id = :id")
+    Optional<ProductDetails> findByIdWithGrade(@Param("id") Long id);
 }

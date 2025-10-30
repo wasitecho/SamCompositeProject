@@ -57,15 +57,18 @@ function CartPage() {
     
     // Optimistically update the UI immediately for smooth experience
     setCartItems(prevItems => {
-      const updatedItems = prevItems.map(item => 
-        item.id === cartId 
-          ? { 
-              ...item, 
-              quantity: newQuantity,
-              totalPrice: (parseFloat(item.unitPrice) * newQuantity).toString()
-            }
-          : item
-      );
+      const updatedItems = prevItems.map(item => {
+        if (item.id !== cartId) return item;
+        const currentQty = parseInt(item.quantity) || 1;
+        const currentTotal = parseFloat(item.totalPrice) || (parseFloat(item.unitPrice) * currentQty) || 0;
+        const perUnit = currentQty > 0 ? (currentTotal / currentQty) : parseFloat(item.unitPrice) || 0;
+        const newTotal = perUnit * newQuantity;
+        return {
+          ...item,
+          quantity: newQuantity,
+          totalPrice: newTotal.toString()
+        };
+      });
       console.log('🔄 Cart items after quantity update:', { 
         cartId, 
         newQuantity,
@@ -234,7 +237,9 @@ function CartPage() {
                             <br />
                             Thickness: {item.thicknessName}
                             <br />
-                            Size: {item.length}x{item.breadth}
+                            Size: {(item.cutLength && item.cutWidth)
+                              ? `${item.cutLength}x${item.cutWidth}`
+                              : `${item.length}x${item.breadth}`}
                             {item.discount && parseFloat(item.discount) > 0 && (
                               <>
                                 <br />

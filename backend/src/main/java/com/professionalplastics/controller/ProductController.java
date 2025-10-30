@@ -1,14 +1,14 @@
 package com.professionalplastics.controller;
 
-import com.professionalplastics.entity.Product;
-import com.professionalplastics.repository.ProductRepository;
+import com.professionalplastics.dtos.ProductDTO;
+import com.professionalplastics.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/products")
@@ -16,33 +16,31 @@ import java.util.Optional;
 public class ProductController {
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductService productService;
 
     /**
      * GET /products/{id} - fetch product by id
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        Optional<Product> product = productRepository.findById(id);
-        return product.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.getById(id));
     }
 
     /**
      * GET /products - get all products
      */
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> products = productRepository.findAll();
-        return ResponseEntity.ok(products);
+    public ResponseEntity<List<ProductDTO>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAll());
     }
 
     /**
      * POST /products - create a new product
      */
     @PostMapping
-    public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product) {
-        Product createdProduct = productRepository.save(product);
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO product) {
+        ProductDTO createdProduct = productService.create(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
 
@@ -50,56 +48,46 @@ public class ProductController {
      * PUT /products/{id} - update a product
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id,
-                                                 @Valid @RequestBody Product productDetails) {
-        Optional<Product> existingProduct = productRepository.findById(id);
-        if (existingProduct.isPresent()) {
-            Product product = existingProduct.get();
-            product.setProductName(productDetails.getProductName());
-            product.setDescription(productDetails.getDescription());
-            product.setCategoryName(productDetails.getCategoryName());
-            Product updatedProduct = productRepository.save(product);
-            return ResponseEntity.ok(updatedProduct);
-        }
-        return ResponseEntity.notFound().build();
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id,
+                                                 @Valid @RequestBody ProductDTO productDetails) {
+        ProductDTO updated = productService.update(id, productDetails);
+        return ResponseEntity.ok(updated);
     }
 
     /**
      * DELETE /products/{id} - delete a product
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        if (productRepository.existsById(id)) {
-            productRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+        productService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     /**
      * DELETE /products - delete all products
      */
     @DeleteMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteAllProducts() {
-        productRepository.deleteAll();
-        return ResponseEntity.noContent().build();
+        // Optional: keep an admin bulk-delete if needed via service; not required by base CRUD
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
     }
 
     /**
      * GET /products/category/{categoryName} - get products by category name
      */
     @GetMapping("/category/{categoryName}")
-    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable String categoryName) {
-        List<Product> products = productRepository.findByCategoryNameIgnoreCase(categoryName);
-        return ResponseEntity.ok(products);
+    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable String categoryName) {
+        return ResponseEntity.ok(productService.getByCategoryName(categoryName));
     }
 
     /**
      * GET /products/search - search products by name
      */
     @GetMapping("/search")
-    public ResponseEntity<List<Product>> searchProductsByName(@RequestParam String name) {
-        List<Product> products = productRepository.findByProductNameContainingIgnoreCase(name);
-        return ResponseEntity.ok(products);
+    public ResponseEntity<List<ProductDTO>> searchProductsByName(@RequestParam String name) {
+        return ResponseEntity.ok(productService.searchByName(name));
     }
 }

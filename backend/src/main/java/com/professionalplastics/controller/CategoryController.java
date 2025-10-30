@@ -1,67 +1,67 @@
 package com.professionalplastics.controller;
 
-import com.professionalplastics.entity.Category;
-import com.professionalplastics.entity.Grade;
-import com.professionalplastics.repository.CategoryRepository;
-import com.professionalplastics.repository.GradeRepository;
+import com.professionalplastics.dtos.CategoryDTO;
+import com.professionalplastics.dtos.GradeDTO;
+import com.professionalplastics.service.CategoryService;
+import com.professionalplastics.service.GradeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/categories")
 @CrossOrigin(origins = "*")
 public class CategoryController {
 
-    private final CategoryRepository categoryRepository;
-    private final GradeRepository gradeRepository;
+    private final CategoryService categoryService;
+    private final GradeService gradeService;
 
-    public CategoryController(CategoryRepository categoryRepository,
-                              GradeRepository gradeRepository) {
-        this.categoryRepository = categoryRepository;
-        this.gradeRepository = gradeRepository;
+    public CategoryController(CategoryService categoryService,
+                              GradeService gradeService) {
+        this.categoryService = categoryService;
+        this.gradeService = gradeService;
     }
 
     /**
      * GET /categories - fetch all categories
      */
     @GetMapping
-    public ResponseEntity<List<Category>> getAllCategories() {
-        List<Category> categories = categoryRepository.findAll();
-        return ResponseEntity.ok(categories);
+    public ResponseEntity<List<CategoryDTO>> getAllCategories() {
+        return ResponseEntity.ok(categoryService.getAll());
+    }
+
+    /**
+     * GET /categories/test - test endpoint to verify controller is accessible
+     */
+    @GetMapping("/test")
+    public ResponseEntity<String> testEndpoint() {
+        return ResponseEntity.ok("Category controller is working!");
     }
 
     /**
      * GET /categories/{id} - fetch category by id
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
-        Optional<Category> category = categoryRepository.findById(id);
-        return category.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id) {
+        return ResponseEntity.ok(categoryService.getById(id));
     }
 
     /**
      * GET /categories/{id}/grades - get grades for a specific category
      */
     @GetMapping("/{id}/grades")
-    public ResponseEntity<List<Grade>> getGradesByCategory(@PathVariable Long id) {
-        if (!categoryRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        List<Grade> grades = gradeRepository.findByCategoryId(id);
-        return ResponseEntity.ok(grades);
+    public ResponseEntity<List<GradeDTO>> getGradesByCategory(@PathVariable Long id) {
+        return ResponseEntity.ok(gradeService.findByCategoryId(id));
     }
 
     /**
      * POST /categories - add new category
      */
     @PostMapping
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-        Category savedCategory = categoryRepository.save(category);
+    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO category) {
+        CategoryDTO savedCategory = categoryService.create(category);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
     }
 
@@ -69,9 +69,8 @@ public class CategoryController {
      * POST /categories/bulk - add multiple categories at once
      */
     @PostMapping("/bulk")
-    public ResponseEntity<List<Category>> createCategories(@RequestBody List<Category> categories) {
-        List<Category> savedCategories = categoryRepository.saveAll(categories);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedCategories);
+    public ResponseEntity<Void> createCategories(@RequestBody List<CategoryDTO> categories) {
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
     }
 
     /**
@@ -79,8 +78,7 @@ public class CategoryController {
      */
     @DeleteMapping
     public ResponseEntity<Void> deleteAllCategories() {
-        categoryRepository.deleteAll();
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
     }
 
     /**
@@ -88,10 +86,13 @@ public class CategoryController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategoryById(@PathVariable Long id) {
-        if (!categoryRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
+        try {
+            categoryService.delete(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            System.err.println("Error deleting category: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        categoryRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 }

@@ -1,11 +1,12 @@
 import api from './api';
 
-export const addToCart = async (productPriceId, quantity, discount = 0) => {
+export const addToCart = async (productPriceId, quantity, discount = 0, totalPrice) => {
   try {
     const response = await api.post('/cart', {
       productPriceId,
       quantity,
-      discount
+      discount,
+      totalPrice
     });
     return { success: true, data: response.data };
   } catch (error) {

@@ -1,106 +1,69 @@
 package com.professionalplastics.service;
 
+import com.professionalplastics.dtos.ProductDTO;
 import com.professionalplastics.entity.Product;
+import com.professionalplastics.exception.EntityNotFoundException;
 import com.professionalplastics.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class ProductService {
-    
+public class ProductService implements BaseCrudService<ProductDTO> {
+
     @Autowired
     private ProductRepository productRepository;
-    
-    /**
-     * Get all products
-     * @return list of all products
-     */
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+
+    @Override
+    public ProductDTO getById(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found: " + id));
+        return toDto(product);
     }
-    
-    /**
-     * Get product by ID
-     * @param id the product ID
-     * @return optional product
-     */
-    public Optional<Product> getProductById(Long id) {
-        return productRepository.findById(id);
+
+    @Override
+    public List<ProductDTO> getAll() {
+        return productRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
     }
-    
-    /**
-     * Create a new product
-     * @param product the product to create
-     * @return the created product
-     */
-    public Product createProduct(Product product) {
-        return productRepository.save(product);
+
+    @Override
+    public ProductDTO create(ProductDTO dto) {
+        Product product = new Product(dto.getProductName(), dto.getDescription(), dto.getCategoryName());
+        Product saved = productRepository.save(product);
+        return toDto(saved);
     }
-    
-    /**
-     * Create multiple products
-     * @param products list of products to create
-     * @return list of created products
-     */
-    public List<Product> createProducts(List<Product> products) {
-        return productRepository.saveAll(products);
+
+    @Override
+    public ProductDTO update(Long id, ProductDTO dto) {
+        Product existing = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found: " + id));
+        existing.setProductName(dto.getProductName());
+        existing.setDescription(dto.getDescription());
+        existing.setCategoryName(dto.getCategoryName());
+        return toDto(productRepository.save(existing));
     }
-    
-    /**
-     * Update an existing product
-     * @param id the product ID
-     * @param productDetails the updated product details
-     * @return the updated product
-     */
-    public Product updateProduct(Long id, Product productDetails) {
-        Optional<Product> optionalProduct = productRepository.findById(id);
-        if (optionalProduct.isPresent()) {
-            Product product = optionalProduct.get();
-            product.setProductName(productDetails.getProductName());
-            product.setDescription(productDetails.getDescription());
-            product.setCategoryName(productDetails.getCategoryName());
-            return productRepository.save(product);
+
+    @Override
+    public void delete(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new EntityNotFoundException("Product not found: " + id);
         }
-        return null;
+        productRepository.deleteById(id);
     }
-    
-    /**
-     * Delete a product by ID
-     * @param id the product ID
-     * @return true if deleted, false if not found
-     */
-    public boolean deleteProduct(Long id) {
-        if (productRepository.existsById(id)) {
-            productRepository.deleteById(id);
-            return true;
-        }
-        return false;
+
+    public List<ProductDTO> getByCategoryName(String categoryName) {
+        return productRepository.findByCategoryNameIgnoreCase(categoryName)
+                .stream().map(this::toDto).collect(Collectors.toList());
     }
-    
-    /**
-     * Delete all products
-     */
-    public void deleteAllProducts() {
-        productRepository.deleteAll();
+
+    public List<ProductDTO> searchByName(String name) {
+        return productRepository.findByProductNameContainingIgnoreCase(name)
+                .stream().map(this::toDto).collect(Collectors.toList());
     }
-    
-    /**
-     * Get products by category name
-     * @param categoryName the category name
-     * @return list of products in the category
-     */
-    public List<Product> getProductsByCategory(String categoryName) {
-        return productRepository.findByCategoryNameIgnoreCase(categoryName);
-    }
-    
-    /**
-     * Search products by product name
-     * @param productName the product name to search for
-     * @return list of products matching the name
-     */
-    public List<Product> searchProductsByName(String productName) {
-        return productRepository.findByProductNameContainingIgnoreCase(productName);
+
+    private ProductDTO toDto(Product product) {
+        return new ProductDTO(product.getId(), product.getProductName(), product.getDescription(), product.getCategoryName());
     }
 }

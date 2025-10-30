@@ -1,10 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
+import { motion } from 'framer-motion';
 
 function HomePage() {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
+  const { isAuthenticated } = useAuth();
 
   const fetchCategories = async () => {
     try {
@@ -19,6 +22,14 @@ function HomePage() {
     // Prefetch categories so we have data before hover
     fetchCategories();
   }, []);
+
+  const handleSheetsClick = () => {
+    if (!isAuthenticated()) {
+      alert('Please login to access the Sheets section.');
+      return;
+    }
+    navigate('/categories?type=sheet');
+  };
 
 
 
@@ -71,41 +82,206 @@ function HomePage() {
       </section>
 
       {/* Featured Categories */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Featured Categories</h2>
-            <p className="text-gray-600">Explore our comprehensive range of industrial plastic materials</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div onClick={() => navigate('/categories')} className="cursor-pointer">
-              <div className="h-full rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition p-6 text-center">
-                <div className="text-4xl mb-3">📋</div>
-                <h5 className="text-lg font-semibold">Sheets</h5>
-                <p className="text-gray-600 text-sm">High-quality plastic sheets for cutting, machining, and fabrication</p>
-              </div>
-            </div>
-            <div>
-              <div className="h-full rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition p-6 text-center">
-                <div className="text-4xl mb-3">🔩</div>
-                <h5 className="text-lg font-semibold">Rods</h5>
-                <p className="text-gray-600 text-sm">Precision-machined plastic rods for industrial applications</p>
-              </div>
-            </div>
-            <div>
-              <div className="h-full rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition p-6 text-center">
-                <div className="text-4xl mb-3">🔧</div>
-                <h5 className="text-lg font-semibold">Tubing</h5>
-                <p className="text-gray-600 text-sm">Durable plastic tubing for fluid handling and protection</p>
-              </div>
-            </div>
-            <div>
-              <div className="h-full rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition p-6 text-center">
-                <div className="text-4xl mb-3">📄</div>
-                <h5 className="text-lg font-semibold">Films</h5>
-                <p className="text-gray-600 text-sm">Protective films and membranes for specialized applications</p>
-              </div>
-            </div>
+          <motion.div 
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Featured Categories
+            </h2>
+            <p className="text-gray-600 mt-2 text-lg">Explore our comprehensive range of industrial plastic materials</p>
+          </motion.div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Sheets Card */}
+            <motion.div 
+              onClick={handleSheetsClick} 
+              className="cursor-pointer group"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.05, rotateY: 5 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <motion.div 
+                className="h-full rounded-2xl border-2 border-transparent bg-gradient-to-br from-blue-50 to-indigo-100 shadow-lg hover:shadow-2xl transition-all duration-300 p-8 text-center relative overflow-hidden"
+                whileHover={{ 
+                  background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
+                  borderColor: "#3b82f6"
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-purple-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                />
+                <motion.div 
+                  className="text-5xl mb-4 relative z-10"
+                  whileHover={{ scale: 1.2, rotate: 10 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  📋
+                </motion.div>
+                <motion.h5 
+                  className="text-xl font-bold mb-3 relative z-10 group-hover:text-white transition-colors duration-300"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  Sheets
+                </motion.h5>
+                <motion.p 
+                  className="text-gray-600 text-sm group-hover:text-blue-100 transition-colors duration-300 relative z-10"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  High-quality plastic sheets for cutting, machining, and fabrication
+                </motion.p>
+                <motion.div 
+                  className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
+                />
+              </motion.div>
+            </motion.div>
+
+            {/* Rods Card */}
+            <motion.div 
+              className="cursor-pointer group"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.05, rotateY: 5 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <motion.div 
+                className="h-full rounded-2xl border-2 border-transparent bg-gradient-to-br from-green-50 to-emerald-100 shadow-lg hover:shadow-2xl transition-all duration-300 p-8 text-center relative overflow-hidden"
+                whileHover={{ 
+                  background: "linear-gradient(135deg, #10b981, #059669)",
+                  borderColor: "#10b981"
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-br from-green-400/20 to-emerald-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                />
+                <motion.div 
+                  className="text-5xl mb-4 relative z-10"
+                  whileHover={{ scale: 1.2, rotate: -10 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  🔩
+                </motion.div>
+                <motion.h5 
+                  className="text-xl font-bold mb-3 relative z-10 group-hover:text-white transition-colors duration-300"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  Rods
+                </motion.h5>
+                <motion.p 
+                  className="text-gray-600 text-sm group-hover:text-green-100 transition-colors duration-300 relative z-10"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  Precision-machined plastic rods for industrial applications
+                </motion.p>
+                <motion.div 
+                  className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
+                />
+              </motion.div>
+            </motion.div>
+
+            {/* Tubing Card */}
+            <motion.div 
+              className="cursor-pointer group"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.05, rotateY: 5 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <motion.div 
+                className="h-full rounded-2xl border-2 border-transparent bg-gradient-to-br from-orange-50 to-red-100 shadow-lg hover:shadow-2xl transition-all duration-300 p-8 text-center relative overflow-hidden"
+                whileHover={{ 
+                  background: "linear-gradient(135deg, #f97316, #dc2626)",
+                  borderColor: "#f97316"
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-br from-orange-400/20 to-red-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                />
+                <motion.div 
+                  className="text-5xl mb-4 relative z-10"
+                  whileHover={{ scale: 1.2, rotate: 15 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  🔧
+                </motion.div>
+                <motion.h5 
+                  className="text-xl font-bold mb-3 relative z-10 group-hover:text-white transition-colors duration-300"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  Tubing
+                </motion.h5>
+                <motion.p 
+                  className="text-gray-600 text-sm group-hover:text-orange-100 transition-colors duration-300 relative z-10"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  Durable plastic tubing for fluid handling and protection
+                </motion.p>
+                <motion.div 
+                  className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 to-red-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
+                />
+              </motion.div>
+            </motion.div>
+
+            {/* Films Card */}
+            <motion.div 
+              className="cursor-pointer group"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.05, rotateY: 5 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <motion.div 
+                className="h-full rounded-2xl border-2 border-transparent bg-gradient-to-br from-purple-50 to-pink-100 shadow-lg hover:shadow-2xl transition-all duration-300 p-8 text-center relative overflow-hidden"
+                whileHover={{ 
+                  background: "linear-gradient(135deg, #8b5cf6, #ec4899)",
+                  borderColor: "#8b5cf6"
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-br from-purple-400/20 to-pink-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                />
+                <motion.div 
+                  className="text-5xl mb-4 relative z-10"
+                  whileHover={{ scale: 1.2, rotate: -15 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  📄
+                </motion.div>
+                <motion.h5 
+                  className="text-xl font-bold mb-3 relative z-10 group-hover:text-white transition-colors duration-300"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  Films
+                </motion.h5>
+                <motion.p 
+                  className="text-gray-600 text-sm group-hover:text-purple-100 transition-colors duration-300 relative z-10"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  Protective films and membranes for specialized applications
+                </motion.p>
+                <motion.div 
+                  className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
+                />
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </section>

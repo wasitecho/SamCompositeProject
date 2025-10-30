@@ -31,4 +31,11 @@ public interface ProductPriceRepository extends JpaRepository<ProductPrice, Long
            "JOIN pp.productDetail pd " +
            "WHERE pd.id = :productDetailId")
     List<ProductPrice> findByProductDetailId(@Param("productDetailId") Long productDetailId);
+    
+    @Query("SELECT pp FROM ProductPrice pp " +
+           "JOIN FETCH pp.productDetail pd " +
+           "JOIN FETCH pp.thickness t " +
+           "JOIN FETCH pp.size s " +
+           "WHERE pp.id = :id")
+    Optional<ProductPrice> findByIdWithRelations(@Param("id") Long id);
 }

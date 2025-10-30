@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
 import { 
   fetchProductDetailsByGrade, 
   createProductDetails,
+  updateProductDetails,
   fetchThicknesses,
   createThickness,
   fetchSizes,
   createSize,
   fetchPricesByGrade,
-  createPrice
+  createPrice,
+  updatePrice
 } from '../services/productDetails';
 import { addToCart } from '../services/cart';
 import { createFullSheetsQuotation, createCutToSizeQuotation } from '../services/quotations';
@@ -24,6 +28,7 @@ function ProductDetailsPage() {
   const { id } = useParams(); // gradeId
   const query = useQuery();
   const gradeName = query.get('gradeName') || '';
+  const { isAdmin, isSales } = useAuth();
   const [productDetails, setProductDetails] = useState([]);
   const [thicknesses, setThicknesses] = useState([]);
   const [sizes, setSizes] = useState([]);
@@ -69,26 +74,44 @@ function ProductDetailsPage() {
   const [showThicknessModal, setShowThicknessModal] = useState(false);
   const [showSizeModal, setShowSizeModal] = useState(false);
   const [showPriceModal, setShowPriceModal] = useState(false);
+  const [showEditSeriesModal, setShowEditSeriesModal] = useState(false);
+  const [showEditPriceModal, setShowEditPriceModal] = useState(false);
+
   
   // Loading states for each modal
   const [seriesLoading, setSeriesLoading] = useState(false);
   const [thicknessLoading, setThicknessLoading] = useState(false);
   const [sizeLoading, setSizeLoading] = useState(false);
   const [priceLoading, setPriceLoading] = useState(false);
+  const [editSeriesLoading, setEditSeriesLoading] = useState(false);
+  const [editPriceLoading, setEditPriceLoading] = useState(false);
   
   // Error and success states for each modal
   const [seriesError, setSeriesError] = useState('');
   const [thicknessError, setThicknessError] = useState('');
   const [sizeError, setSizeError] = useState('');
   const [priceError, setPriceError] = useState('');
+  const [editSeriesError, setEditSeriesError] = useState('');
+  const [editPriceError, setEditPriceError] = useState('');
   
   const [seriesSuccess, setSeriesSuccess] = useState('');
   const [thicknessSuccess, setThicknessSuccess] = useState('');
   const [sizeSuccess, setSizeSuccess] = useState('');
   const [priceSuccess, setPriceSuccess] = useState('');
+  const [editSeriesSuccess, setEditSeriesSuccess] = useState('');
+  const [editPriceSuccess, setEditPriceSuccess] = useState('');
 
   // Form data for individual fields
   const [seriesFormData, setSeriesFormData] = useState({ series: '' });
+  const [editSeriesFormData, setEditSeriesFormData] = useState({ series: '' });
+  const [editingSeriesId, setEditingSeriesId] = useState(null);
+  const [editPriceFormData, setEditPriceFormData] = useState({
+    productDetailId: '',
+    thicknessId: '',
+    sizeId: '',
+    price: ''
+  });
+  const [editingPriceId, setEditingPriceId] = useState(null);
   const [thicknessFormData, setThicknessFormData] = useState({ thickness: '' });
   const [sizeFormData, setSizeFormData] = useState({ length: '', breadth: '' });
   const [priceFormData, setPriceFormData] = useState({
@@ -342,50 +365,55 @@ function ProductDetailsPage() {
     }
   }, [activeTab, quantity, quantityPerSheet]);
 
-  // Calculate Cut To Size price per unit: Base Price × Number of Sheets ÷ Quantity
+  // Calculate Cut To Size price per unit: (Base Price × Number of Sheets + Machining Cost) ÷ Quantity
   useEffect(() => {
     if (activeTab === 'cut-to-size' && fullSheetPrice && numberOfFullSheetsRequired && quantity && parseInt(quantity) >= 1) {
       const basePriceNum = parseFloat(fullSheetPrice);
       const numberOfSheetsNum = parseInt(numberOfFullSheetsRequired);
       const quantityNum = parseInt(quantity);
+      const machiningCostNum = parseFloat(machiningCost || 0);
       
       if (!isNaN(basePriceNum) && !isNaN(numberOfSheetsNum) && !isNaN(quantityNum) && quantityNum > 0) {
-        // NEW CALCULATION: Base Price × Number of Sheets ÷ Quantity
-        const pricePerUnit = (basePriceNum * numberOfSheetsNum) / quantityNum;
+        // CORRECT CALCULATION: (Base Price × Number of Sheets + Machining Cost) ÷ Quantity
+        const totalCost = (basePriceNum * numberOfSheetsNum) + machiningCostNum;
+        const pricePerUnit = totalCost / quantityNum;
         setPricePerUnit(pricePerUnit.toString());
         console.log('✅ Cut-to-Size price per unit calculated:', {
           basePrice: basePriceNum,
           numberOfSheets: numberOfSheetsNum,
+          machiningCost: machiningCostNum,
           quantity: quantityNum,
+          totalCost: totalCost,
           pricePerUnit: pricePerUnit,
-          calculation: `(${basePriceNum} × ${numberOfSheetsNum}) ÷ ${quantityNum} = ${pricePerUnit}`
+          calculation: `(${basePriceNum} × ${numberOfSheetsNum} + ${machiningCostNum}) ÷ ${quantityNum} = ${pricePerUnit}`
         });
-      } else {
+      } else {  
         setPricePerUnit('');
       }
     } else {
       setPricePerUnit('');
     }
-  }, [activeTab, fullSheetPrice, numberOfFullSheetsRequired, quantity]);
+  }, [activeTab, fullSheetPrice, numberOfFullSheetsRequired, quantity, machiningCost]);
 
-  // Calculate total price: Base Price × Number of Sheets × Quantity
+  // Calculate total price: Cut to Size Price Per Unit × Quantity
   useEffect(() => {
     if (activeTab === 'cut-to-size') {
-      if (fullSheetPrice && numberOfFullSheetsRequired && quantity) {
-        const basePriceNum = parseFloat(fullSheetPrice);
-        const numberOfSheetsNum = parseInt(numberOfFullSheetsRequired);
+      if (pricePerUnit && quantity) {
+        const pricePerUnitNum = parseFloat(pricePerUnit);
         const quantityNum = parseInt(quantity);
         
-        if (!isNaN(basePriceNum) && !isNaN(numberOfSheetsNum) && !isNaN(quantityNum) && quantityNum > 0) {
-          // NEW CALCULATION: Base Price × Number of Sheets × Quantity
-          const totalCalculatedPrice = basePriceNum * numberOfSheetsNum * quantityNum;
+        if (!isNaN(pricePerUnitNum) && !isNaN(quantityNum) && quantityNum > 0) {
+          // CORRECT CALCULATION: Cut to Size Price Per Unit × Quantity
+          // (Machining cost is already included in pricePerUnit)
+          const totalCalculatedPrice = pricePerUnitNum * quantityNum;
           setCalculatedPrice(totalCalculatedPrice.toString());
           
           console.log('✅ Total Calculated Price:', {
-            basePrice: basePriceNum,
-            numberOfSheets: numberOfSheetsNum,
+            pricePerUnit: pricePerUnitNum,
             quantity: quantityNum,
-            calculation: `${basePriceNum} × ${numberOfSheetsNum} × ${quantityNum} = ${totalCalculatedPrice}`
+            machiningCost: machiningCost,
+            totalCalculatedPrice: totalCalculatedPrice,
+            calculation: `${pricePerUnitNum} × ${quantityNum} = ${totalCalculatedPrice}`
           });
         } else {
           setCalculatedPrice('');
@@ -394,7 +422,7 @@ function ProductDetailsPage() {
         setCalculatedPrice('');
       }
     }
-  }, [activeTab, fullSheetPrice, numberOfFullSheetsRequired, quantity]);
+  }, [activeTab, pricePerUnit, quantity, machiningCost]);
 
   const showFullSheetQuotation = () => {
     if (totalPrice && quantity) {
@@ -556,7 +584,7 @@ function ProductDetailsPage() {
       console.log('Quotation creation result:', result);
       
       if (result && result.id) {
-        setQuotationMessage(`Full sheets quotation saved successfully! Quotation ID: ${result.id}`);
+        setQuotationMessage('Full sheets quotation saved successfully!');
         
         // Clear form after successful save
         setTimeout(() => {
@@ -569,12 +597,10 @@ function ProductDetailsPage() {
           setTotalPrice('');
         }, 3000);
       } else {
-        console.error('Unexpected response structure:', result);
         setQuotationMessage('Quotation saved but response format unexpected. Please check quotations history.');
       }
 
     } catch (error) {
-      console.error('Error saving full sheets quotation:', error);
       setQuotationMessage('Failed to save quotation: ' + error.message);
     } finally {
       setSavingQuotation(false);
@@ -631,12 +657,10 @@ function ProductDetailsPage() {
         productPriceId: selectedPrice.id
       };
 
-      console.log('Sending cut-to-size quotation data:', quotationData);
       const result = await createCutToSizeQuotation(quotationData);
-      console.log('Cut-to-size quotation creation result:', result);
       
       if (result && result.id) {
-        setQuotationMessage(`Cut-to-size quotation saved successfully! Quotation ID: ${result.id}`);
+        setQuotationMessage('Cut-to-size quotation saved successfully!');
         
         // Clear form after successful save
         setTimeout(() => {
@@ -650,12 +674,10 @@ function ProductDetailsPage() {
           setCalculatedPrice('');
         }, 3000);
       } else {
-        console.error('Unexpected response structure:', result);
         setQuotationMessage('Quotation saved but response format unexpected. Please check quotations history.');
       }
 
     } catch (error) {
-      console.error('Error saving cut-to-size quotation:', error);
       setQuotationMessage('Failed to save quotation: ' + error.message);
     } finally {
       setSavingQuotation(false);
@@ -700,10 +722,148 @@ function ProductDetailsPage() {
         setSeriesError(result.message);
       }
     } catch (e) {
-      console.error('Error adding series:', e);
       setSeriesError(e.response?.data?.message || 'Failed to add series');
     } finally {
       setSeriesLoading(false);
+    }
+  };
+
+  const handleEditSeries = () => {
+    if (!selectedSeries) return;
+    
+    // Find the product detail ID for the selected series
+    const productDetail = productDetails.find(pd => pd.series === selectedSeries);
+    if (productDetail) {
+      setEditingSeriesId(productDetail.id);
+      setEditSeriesFormData({ series: selectedSeries });
+      setEditSeriesError('');
+      setEditSeriesSuccess('');
+      setShowEditSeriesModal(true);
+    }
+  };
+
+  const handleEditPrice = () => {
+    if (!selectedSeries || !selectedThickness || !selectedSize) return;
+    
+    // Find the price ID for the selected combination
+    const selectedPrice = prices.find(price => {
+      if (!price || !price.thicknessName || !price.length || !price.breadth || !price.productDetailId) {
+        return false;
+      }
+      
+      const matchingProductDetail = productDetails.find(pd => 
+        pd.id === price.productDetailId && pd.series === selectedSeries
+      );
+      
+      return matchingProductDetail &&
+             price.thicknessName === selectedThickness &&
+             `${price.length}x${price.breadth}` === selectedSize;
+    });
+
+    if (selectedPrice) {
+      setEditingPriceId(selectedPrice.id);
+      setEditPriceFormData({
+        productDetailId: selectedPrice.productDetailId,
+        thicknessId: selectedPrice.thicknessId,
+        sizeId: selectedPrice.sizeId,
+        price: selectedPrice.price.toString()
+      });
+      setEditPriceError('');
+      setEditPriceSuccess('');
+      setShowEditPriceModal(true);
+    }
+  };
+
+  const handleEditSeriesSubmit = async (e) => {
+    e.preventDefault();
+    setEditSeriesLoading(true);
+    setEditSeriesError('');
+    setEditSeriesSuccess('');
+
+    try {
+      if (!editSeriesFormData.series.trim()) {
+        setEditSeriesError('Series name is required');
+        setEditSeriesLoading(false);
+        return;
+      }
+
+      const payload = {
+        series: editSeriesFormData.series.trim()
+      };
+
+      const result = await updateProductDetails(editingSeriesId, payload);
+      
+      if (result.success) {
+        setEditSeriesSuccess('Series updated successfully!');
+        
+        // Refresh product details
+        const detailsResponse = await fetchProductDetailsByGrade(id);
+        setProductDetails(detailsResponse.productDetails || []);
+        
+        // Reset form and close modal
+        setEditSeriesFormData({ series: '' });
+        setEditingSeriesId(null);
+        setTimeout(() => {
+          setShowEditSeriesModal(false);
+          setEditSeriesSuccess('');
+        }, 2000);
+      } else {
+        setEditSeriesError(result.message);
+      }
+    } catch (e) {
+      setEditSeriesError(e.response?.data?.message || 'Failed to update series');
+    } finally {
+      setEditSeriesLoading(false);
+    }
+  };
+
+  const handleEditPriceSubmit = async (e) => {
+    e.preventDefault();
+    setEditPriceLoading(true);
+    setEditPriceError('');
+    setEditPriceSuccess('');
+
+    try {
+      if (!editPriceFormData.price || parseFloat(editPriceFormData.price) <= 0) {
+        setEditPriceError('Valid price value is required');
+        setEditPriceLoading(false);
+        return;
+      }
+
+      const payload = {
+        price: parseFloat(editPriceFormData.price)
+      };
+
+      // Call the actual backend API to update the price
+      const result = await updatePrice(editingPriceId, payload);
+      
+      // Backend returns the updated ProductPriceDTO directly
+      if (result && result.id) {
+        setEditPriceSuccess('Price updated successfully!');
+        
+        // Refresh prices
+        const pricesData = await fetchPricesByGrade(id);
+        setPrices(pricesData);
+        
+        // Reset form and close modal
+        setEditPriceFormData({
+          productDetailId: '',
+          thicknessId: '',
+          sizeId: '',
+          price: ''
+        });
+        setEditingPriceId(null);
+        setTimeout(() => {
+          setShowEditPriceModal(false);
+          setEditPriceSuccess('');
+        }, 2000);
+      } else {
+        setEditPriceError('Failed to update price');
+      }
+    } catch (e) {
+      setEditPriceError(e.response?.data?.message || e.message || 'Failed to update price');
+    } finally {
+      setEditPriceLoading(false);
     }
   };
 
@@ -942,126 +1102,350 @@ function ProductDetailsPage() {
     resetFormFields();
   };
 
+  const pageVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: { 
+      opacity: 1, 
+      scale: 1,
+      transition: { duration: 0.4, ease: "easeOut" }
+    }
+  };
+
+  const tabVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: { 
+      opacity: 1, 
+      x: 0,
+      transition: { duration: 0.3 }
+    }
+  };
+
   return (
-    <div className="container">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>{gradeName || 'Product Details'}</h2>
-      </div>
+    <motion.div 
+      className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-12"
+      variants={pageVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <motion.div 
+          className="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-gray-200"
+          variants={cardVariants}
+        >
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <motion.h1 
+                className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                {gradeName || 'Product Details'}
+              </motion.h1>
+              <motion.p 
+                className="text-gray-600 text-lg"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                Configure specifications and pricing for your requirements
+              </motion.p>
+            </div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
+              <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold ${
+                isAdmin() ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
+              }`}>
+                {isAdmin() ? 'Admin Access' : 'Sales Access'}
+              </span>
+            </motion.div>
+          </div>
+        </motion.div>
       
-      {/* Tab Navigation */}
-      <div className="mb-4">
-        <div className="d-flex gap-2">
-          <button 
-            className={`btn ${activeTab === 'full-sheets' ? 'btn-warning' : 'btn-outline-secondary'}`}
-            onClick={() => handleTabChange('full-sheets')}
-            style={{
-              borderRadius: '20px',
-              padding: '8px 20px',
-              fontWeight: '500'
-            }}
-          >
-            FULL SHEETS
-          </button>
-          <button 
-            className={`btn ${activeTab === 'cut-to-size' ? 'btn-warning' : 'btn-outline-secondary'}`}
-            onClick={() => handleTabChange('cut-to-size')}
-            style={{
-              borderRadius: '20px',
-              padding: '8px 20px',
-              fontWeight: '500'
-            }}
-            title="Cut To Size Sheets - Click to calculate custom sizes"
-          >
-            CUT-TO-SIZE SHEETS
-          </button>
-        </div>
-      </div>
+        {/* Tab Navigation */}
+        <motion.div 
+          className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-200"
+          variants={cardVariants}
+        >
+          <div className="flex flex-col sm:flex-row gap-4">
+            <motion.button
+              className={`px-8 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-3 ${
+                activeTab === 'full-sheets'
+                  ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+              onClick={() => handleTabChange('full-sheets')}
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              variants={tabVariants}
+            >
+              <motion.div
+                whileHover={{ rotate: 5 }}
+                transition={{ duration: 0.2 }}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+              </motion.div>
+              <span>Full Sheets</span>
+            </motion.button>
+            
+            <motion.button
+              className={`px-8 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-3 ${
+                activeTab === 'cut-to-size'
+                  ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+              onClick={() => handleTabChange('cut-to-size')}
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              variants={tabVariants}
+              title="Cut To Size Sheets - Click to calculate custom sizes"
+            >
+              <motion.div
+                whileHover={{ rotate: -5 }}
+                transition={{ duration: 0.2 }}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h1m4 0h1m6-6V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V7z" />
+                </svg>
+              </motion.div>
+              <span>Cut-to-Size Sheets</span>
+            </motion.button>
+          </div>
+        </motion.div>
+        
+        {/* Loading and Error States */}
+        <AnimatePresence>
+          {loading && (
+            <motion.div 
+              className="flex justify-center items-center py-12"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <div className="flex flex-col items-center space-y-4">
+                <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                <p className="text-gray-600 font-medium">Loading product details...</p>
+              </div>
+            </motion.div>
+          )}
+          
+          {error && (
+            <motion.div 
+              className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+            >
+              <div className="flex items-center text-red-700">
+                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+                {error}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       
-      {/* Tab Content Header */}
-      <div className="mb-3 p-3 bg-light rounded">
-        <h5 className="mb-0">
-          Calculate {activeTab === 'full-sheets' ? 'Full Sheets' : 'Cut-to-Size Sheets'} Cost for {gradeName || 'Product Details'}
-        </h5>
-      </div>
-      
-      {loading && <div className="spinner-border text-primary" role="status"><span className="visually-hidden">Loading...</span></div>}
-      {error && <div className="alert alert-danger py-2">{error}</div>}
-      
-      {/* Debug info - remove this later */}
-      <div className="mb-2">
-        <small className="text-muted">
-          Debug: Grade ID: {id}, Product Details Count: {productDetails.length}, Loading: {loading.toString()}, Error: {error}
-        </small>
-      </div>
 
       {/* Show message when no product details exist */}
       {!loading && !error && productDetails.length === 0 && (
-        <div className="alert alert-info">
-          <h5>No Product Details Available</h5>
-          <p>This grade doesn't have any product details yet. Use the + buttons next to each field to add series, thickness, size, and price data individually.</p>
-        </div>
+        <motion.div 
+          className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <h5 className="text-lg font-semibold text-blue-800 mb-2">No Product Details Available</h5>
+              <p className="text-blue-700 mb-3">
+                This grade doesn't have any product details yet. 
+                {isAdmin() 
+                  ? ' Use the + buttons next to each field to add series, thickness, size, and price data individually.'
+                  : ' Contact an administrator to add product details for this grade.'
+                }
+              </p>
+              {isSales() && (
+                <div className="mt-3 p-3 bg-blue-100 rounded-lg">
+                  <small className="text-blue-600 flex items-center">
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    Sales users can view and create quotations, but cannot modify product specifications.
+                  </small>
+                </div>
+              )}
+            </div>
+          </div>
+        </motion.div>
       )}
 
-      {/* Tab Content */}
+      {/* Full Sheets Tab Content */}
       {!loading && !error && activeTab === 'full-sheets' && (
-        <div className="row g-3 align-items-end">
-          <div className="col-12 col-md-10">
-            <div className="row g-3">
-              <div className="col-12 col-sm-6 col-lg-4">
-                <label className="form-label">Series</label>
+        <motion.div 
+          className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200"
+          initial={{ opacity: 0, y: 30, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -30, scale: 0.95 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+            <motion.div 
+              className="row g-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+            >
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -30, rotateY: -15 }}
+                animate={{ opacity: 1, x: 0, rotateY: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                whileHover={{ scale: 1.02, y: -2 }}
+              >
+                <motion.label 
+                  className="form-label fw-bold text-primary mb-2"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  Series
+                </motion.label>
                 <div className="input-group">
-                  <select className="form-select" value={selectedSeries} onChange={(e) => setSelectedSeries(e.target.value)} disabled={!hasProductDetails}>
+                  <motion.select 
+                    className="form-select border-2 border-primary-subtle rounded-3" 
+                    value={selectedSeries} 
+                    onChange={(e) => setSelectedSeries(e.target.value)} 
+                    disabled={!hasProductDetails}
+                    whileFocus={{ scale: 1.02, borderColor: "#0d6efd" }}
+                    transition={{ duration: 0.2 }}
+                  >
                     <option value="">{hasProductDetails ? 'Select Series' : 'No options available'}</option>
                     {getUniqueSeries().map(v => <option key={v} value={v}>{v}</option>)}
-                  </select>
-                  <button 
-                    className="btn btn-outline-success" 
-                    type="button"
-                    onClick={() => setShowSeriesModal(true)}
-                    disabled={loading}
-                    title="Add new series"
-                  >
-                    +
-                  </button>
+                  </motion.select>
+                  {isAdmin() && (
+                    <>
+                      <motion.button 
+                        className="btn btn-success rounded-3 ms-2" 
+                        type="button"
+                        onClick={() => setShowSeriesModal(true)}
+                        disabled={loading}
+                        title="Add new series (Admin only)"
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        whileTap={{ scale: 0.9, rotate: -5 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <motion.span
+                          animate={{ rotate: [0, 90, 0] }}
+                          transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
+                        >
+                          +
+                        </motion.span>
+                      </motion.button>
+                    </>
+                  )}
+                  {isSales() && (
+                    <motion.span 
+                      className="input-group-text bg-light text-muted rounded-3 ms-2" 
+                      title="Sales users cannot add new series"
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      <i className="fas fa-lock"></i>
+                    </motion.span>
+                  )}
                 </div>
-              </div>
-              <div className="col-12 col-sm-6 col-lg-4">
+              </motion.div>
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+              >
                 <label className="form-label">Thickness</label>
                 <div className="input-group">
                   <select className="form-select" value={selectedThickness} onChange={(e) => setSelectedThickness(e.target.value)} disabled={!hasProductDetails}>
                     <option value="">{hasProductDetails ? 'Select Thickness' : 'No options available'}</option>
                     {thicknesses.map(t => <option key={t.id} value={t.thicknessName}>{t.thicknessName}</option>)}
                   </select>
-                  <button 
-                    className="btn btn-outline-success" 
-                    type="button"
-                    onClick={() => setShowThicknessModal(true)}
-                    disabled={loading}
-                    title="Add new thickness"
-                  >
-                    +
-                  </button>
+                  {isAdmin() && (
+                    <motion.button 
+                      className="btn btn-outline-success" 
+                      type="button"
+                      onClick={() => setShowThicknessModal(true)}
+                      disabled={loading}
+                      title="Add new thickness (Admin only)"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      +
+                    </motion.button>
+                  )}
+                  {isSales() && (
+                    <span className="input-group-text bg-light text-muted" title="Sales users cannot add new thickness">
+                      <i className="fas fa-lock"></i>
+                    </span>
+                  )}
                 </div>
-              </div>
-              <div className="col-12 col-sm-6 col-lg-4">
+              </motion.div>
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+              >
                 <label className="form-label">Size</label>
                 <div className="input-group">
                   <select className="form-select" value={selectedSize} onChange={(e) => setSelectedSize(e.target.value)} disabled={!hasProductDetails}>
                     <option value="">{hasProductDetails ? 'Select Size' : 'No options available'}</option>
                     {sizes.map(s => <option key={s.id} value={`${s.length}x${s.breadth}`}>{`${s.length}x${s.breadth}`}</option>)}
                   </select>
-                  <button 
-                    className="btn btn-outline-success" 
-                    type="button"
-                    onClick={() => setShowSizeModal(true)}
-                    disabled={loading}
-                    title="Add new size"
-                  >
-                    +
-                  </button>
+                  {isAdmin() && (
+                    <motion.button 
+                      className="btn btn-outline-success" 
+                      type="button"
+                      onClick={() => setShowSizeModal(true)}
+                      disabled={loading}
+                      title="Add new size (Admin only)"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      +
+                    </motion.button>
+                  )}
+                  {isSales() && (
+                    <span className="input-group-text bg-light text-muted" title="Sales users cannot add new size">
+                      <i className="fas fa-lock"></i>
+                    </span>
+                  )}
                 </div>
-              </div>
-              <div className="col-12 col-sm-6 col-lg-4">
+              </motion.div>
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.4 }}
+              >
                 <label className="form-label">Quantity <span className="text-danger">*</span></label>
                 <input 
                   type="number" 
@@ -1075,9 +1459,28 @@ function ProductDetailsPage() {
                 {quantity && parseInt(quantity) < 1 && (
                   <div className="text-danger small mt-1">Minimum quantity is 1</div>
                 )}
-              </div>
-              <div className="col-12 col-sm-6 col-lg-4">
-                <label className="form-label">Base Price (per unit)</label>
+              </motion.div>
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.5 }}
+              >
+                <label className="form-label d-flex justify-content-between align-items-center">
+                    <span>Base Price (per unit)</span>
+                    {isAdmin() && basePrice && selectedSeries && selectedThickness && selectedSize && (
+                      <motion.small
+                        className="text-muted"
+                        style={{ cursor: "pointer", fontSize: "0.8rem" }}
+                        onClick={handleEditPrice}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        Edit Price
+                      </motion.small>
+                    )}
+                  </label>
                 <div className="input-group">
                   <input 
                     type="text" 
@@ -1086,21 +1489,39 @@ function ProductDetailsPage() {
                     readOnly 
                     placeholder={quantity && parseInt(quantity) >= 1 ? "Select specifications above" : "Enter quantity first"}
                   />
-                  <button 
-                    className="btn btn-outline-success" 
-                    type="button"
-                    onClick={() => setShowPriceModal(true)}
-                    disabled={loading}
-                    title="Add new price"
-                  >
-                    +
-                  </button>
+                  {isAdmin() && (
+                    <>
+                      <motion.button 
+                        className="btn btn-outline-success" 
+                        type="button"
+                        onClick={() => setShowPriceModal(true)}
+                        disabled={loading}
+                        title="Add new price (Admin only)"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        +
+                      </motion.button>
+
+                    </>
+                  )}
+                  {isSales() && (
+                    <span className="input-group-text bg-light text-muted" title="Sales users cannot add new prices">
+                      <i className="fas fa-lock"></i>
+                    </span>
+                  )}
                 </div>
                 {!quantity && (
                   <div className="text-muted small mt-1">Enter quantity to see base price</div>
                 )}
-              </div>
-              <div className="col-12 col-sm-6 col-lg-4">
+              </motion.div>
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.6 }}
+              >
                 <label className="form-label">Discount</label>
                 <select className="form-select" value={discount} onChange={(e) => setDiscount(e.target.value)}>
                   <option value="">No Discount</option>
@@ -1108,8 +1529,13 @@ function ProductDetailsPage() {
                   <option value="10">10%</option>
                   <option value="15">15%</option>
                 </select>
-              </div>
-              <div className="col-12 col-sm-6 col-lg-4">
+              </motion.div>
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.7 }}
+              >
                 <label className="form-label">Total Price</label>
                 <input 
                   type="text" 
@@ -1118,100 +1544,274 @@ function ProductDetailsPage() {
                   readOnly 
                   placeholder="Calculated automatically"
                 />
-              </div>
-            </div>
-          </div>
-          <div className="col-12 col-md-2 text-md-end">
-            <div className="d-flex flex-column gap-2">
-              <button 
-                className="btn btn-primary w-100 w-md-auto" 
+              </motion.div>
+            </motion.div>
+          
+          {/* Horizontal Action Buttons */}
+          <motion.div 
+            className="col-12 mt-5"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.0 }}
+          >
+            <div className="d-flex flex-wrap justify-content-center gap-3">
+              <motion.button 
+                className="btn btn-lg px-5 py-3 rounded-pill shadow-lg"
+                style={{
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  border: 'none',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  minWidth: '180px'
+                }}
                 onClick={showFullSheetQuotation} 
                 disabled={!hasProductDetails || !quantity || !selectedSeries || !selectedThickness || !selectedSize || !totalPrice}
+                whileHover={{ 
+                  scale: 1.05, 
+                  y: -5,
+                  boxShadow: "0 10px 25px rgba(102, 126, 234, 0.4)"
+                }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.3 }}
               >
-                Get Quotation
-              </button>
-              <button 
-                className="btn btn-success w-100 w-md-auto" 
+                <motion.span
+                  className="d-flex align-items-center justify-content-center gap-2"
+                  whileHover={{ x: 2 }}
+                >
+                  <motion.i 
+                    className="fas fa-file-invoice"
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                  />
+                  Get Quotation
+                </motion.span>
+              </motion.button>
+              
+              <motion.button 
+                className="btn btn-lg px-5 py-3 rounded-pill shadow-lg"
+                style={{
+                  background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                  border: 'none',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  minWidth: '180px'
+                }}
                 onClick={handleAddToCart} 
                 disabled={!hasProductDetails || !selectedSeries || !selectedThickness || !selectedSize || !basePrice || !quantity || parseInt(quantity) < 1}
+                whileHover={{ 
+                  scale: 1.05, 
+                  y: -5,
+                  boxShadow: "0 10px 25px rgba(240, 147, 251, 0.4)"
+                }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.3 }}
               >
-                Add to Cart
-              </button>
-              <button 
-                className="btn btn-info w-100 w-md-auto" 
+                <motion.span
+                  className="d-flex align-items-center justify-content-center gap-2"
+                  whileHover={{ x: 2 }}
+                >
+                  <motion.i 
+                    className="fas fa-shopping-cart"
+                    animate={{ y: [0, -3, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  />
+                  Add to Cart
+                </motion.span>
+              </motion.button>
+              
+              <motion.button 
+                className="btn btn-lg px-5 py-3 rounded-pill shadow-lg"
+                style={{
+                  background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                  border: 'none',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  minWidth: '180px'
+                }}
                 onClick={saveFullSheetsQuotation} 
                 disabled={!hasProductDetails || !quantity || !selectedSeries || !selectedThickness || !selectedSize || !totalPrice || savingQuotation}
+                whileHover={{ 
+                  scale: 1.05, 
+                  y: -5,
+                  boxShadow: "0 10px 25px rgba(79, 172, 254, 0.4)"
+                }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.3 }}
               >
-                {savingQuotation ? 'Saving...' : 'Save Quotation'}
-              </button>
+                <motion.span
+                  className="d-flex align-items-center justify-content-center gap-2"
+                  whileHover={{ x: 2 }}
+                >
+                  <motion.i 
+                    className="fas fa-save"
+                    animate={{ rotate: [0, 360] }}
+                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                  />
+                  {savingQuotation ? 'Saving...' : 'Save Quotation'}
+                </motion.span>
+              </motion.button>
             </div>
-            {quoteMsg && <div className="small mt-2 text-muted">{quoteMsg}</div>}
-            {quotationMessage && <div className={`small mt-2 ${quotationMessage.includes('successfully') ? 'text-success' : 'text-danger'}`}>{quotationMessage}</div>}
-          </div>
-        </div>
+            <AnimatePresence>
+              {(quoteMsg || quotationMessage) && (
+                <motion.div 
+                  className="mt-4 text-center"
+                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.9 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  {quoteMsg && (
+                    <motion.div 
+                      className="alert alert-info rounded-pill d-inline-block px-4 py-2"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <i className="fas fa-info-circle me-2"></i>
+                      {quoteMsg}
+                    </motion.div>
+                  )}
+                  {quotationMessage && (
+                    <motion.div 
+                      className={`alert ${quotationMessage.includes('successfully') ? 'alert-success' : 'alert-danger'} rounded-pill d-inline-block px-4 py-2`}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <i className={`fas ${quotationMessage.includes('successfully') ? 'fa-check-circle' : 'fa-exclamation-triangle'} me-2`}></i>
+                      {quotationMessage}
+                    </motion.div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </motion.div>
       )}
 
       {/* Cut-to-Size Sheets Tab Content */}
       {!loading && !error && activeTab === 'cut-to-size' && (
-        <div className="row g-3 align-items-end">
-          <div className="col-12 col-md-10">
-            <div className="row g-3">
-              <div className="col-12 col-sm-6 col-lg-4">
+        <motion.div 
+          className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200"
+          initial={{ opacity: 0, y: 30, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -30, scale: 0.95 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <motion.div 
+            className="row g-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+          >
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+              >
                 <label className="form-label">Series</label>
                 <div className="input-group">
                   <select className="form-select" value={selectedSeries} onChange={(e) => setSelectedSeries(e.target.value)} disabled={!hasProductDetails}>
                     <option value="">{hasProductDetails ? 'Select Series' : 'No options available'}</option>
                     {getUniqueSeries().map(v => <option key={v} value={v}>{v}</option>)}
                   </select>
-                  <button 
-                    className="btn btn-outline-success" 
-                    type="button"
-                    onClick={() => setShowSeriesModal(true)}
-                    disabled={loading}
-                    title="Add new series"
-                  >
-                    +
-                  </button>
+                  {isAdmin() && (
+                    <motion.button 
+                      className="btn btn-outline-success" 
+                      type="button"
+                      onClick={() => setShowSeriesModal(true)}
+                      disabled={loading}
+                      title="Add new series (Admin only)"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      +
+                    </motion.button>
+                  )}
+                  {isSales() && (
+                    <span className="input-group-text bg-light text-muted" title="Sales users cannot add new series">
+                      <i className="fas fa-lock"></i>
+                    </span>
+                  )}
                 </div>
-              </div>
-              <div className="col-12 col-sm-6 col-lg-4">
+              </motion.div>
+              
+              {/* Thickness Field */}
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+              >
                 <label className="form-label">Thickness</label>
                 <div className="input-group">
                   <select className="form-select" value={selectedThickness} onChange={(e) => setSelectedThickness(e.target.value)} disabled={!hasProductDetails}>
                     <option value="">{hasProductDetails ? 'Select Thickness' : 'No options available'}</option>
                     {thicknesses.map(t => <option key={t.id} value={t.thicknessName}>{t.thicknessName}</option>)}
                   </select>
-                  <button 
-                    className="btn btn-outline-success" 
-                    type="button"
-                    onClick={() => setShowThicknessModal(true)}
-                    disabled={loading}
-                    title="Add new thickness"
-                  >
-                    +
-                  </button>
+                  {isAdmin() && (
+                    <motion.button 
+                      className="btn btn-outline-success" 
+                      type="button"
+                      onClick={() => setShowThicknessModal(true)}
+                      disabled={loading}
+                      title="Add new thickness (Admin only)"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      +
+                    </motion.button>
+                  )}
+                  {isSales() && (
+                    <span className="input-group-text bg-light text-muted" title="Sales users cannot add new thickness">
+                      <i className="fas fa-lock"></i>
+                    </span>
+                  )}
                 </div>
-              </div>
-              <div className="col-12 col-sm-6 col-lg-4">
+              </motion.div>
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+              >
                 <label className="form-label">Size (Full Sheet)</label>
                 <div className="input-group">
                   <select className="form-select" value={selectedSize} onChange={(e) => setSelectedSize(e.target.value)} disabled={!hasProductDetails}>
                     <option value="">{hasProductDetails ? 'Select Size' : 'No options available'}</option>
                     {sizes.map(s => <option key={s.id} value={`${s.length}x${s.breadth}`}>{`${s.length}x${s.breadth}`}</option>)}
                   </select>
-                  <button 
-                    className="btn btn-outline-success" 
-                    type="button"
-                    onClick={() => setShowSizeModal(true)}
-                    disabled={loading}
-                    title="Add new size"
-                  >
-                    +
-                  </button>
+                  {isAdmin() && (
+                    <motion.button 
+                      className="btn btn-outline-success" 
+                      type="button"
+                      onClick={() => setShowSizeModal(true)}
+                      disabled={loading}
+                      title="Add new size (Admin only)"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      +
+                    </motion.button>
+                  )}
+                  {isSales() && (
+                    <span className="input-group-text bg-light text-muted" title="Sales users cannot add new size">
+                      <i className="fas fa-lock"></i>
+                    </span>
+                  )}
                 </div>
-              </div>
+              </motion.div>
               
-              <div className="col-12 col-sm-6 col-lg-4">
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.4 }}
+              >
                 <label className="form-label">Cut Length <span className="text-danger">*</span></label>
                 <input 
                   type="number" 
@@ -1226,8 +1826,13 @@ function ProductDetailsPage() {
                 {cutLength && parseFloat(cutLength) <= 0 && (
                   <div className="text-danger small mt-1">Length must be greater than 0</div>
                 )}
-              </div>
-              <div className="col-12 col-sm-6 col-lg-4">
+              </motion.div>
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.5 }}
+              >
                 <label className="form-label">Cut Width <span className="text-danger">*</span></label>
                 <input 
                   type="number" 
@@ -1242,8 +1847,13 @@ function ProductDetailsPage() {
                 {cutWidth && parseFloat(cutWidth) <= 0 && (
                   <div className="text-danger small mt-1">Width must be greater than 0</div>
                 )}
-              </div>
-              <div className="col-12 col-sm-6 col-lg-4">
+              </motion.div>
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.6 }}
+              >
                 <label className="form-label">Machining Cost</label>
                 <input 
                   type="number" 
@@ -1257,8 +1867,13 @@ function ProductDetailsPage() {
                 {machiningCost && parseFloat(machiningCost) < 0 && (
                   <div className="text-danger small mt-1">Machining cost cannot be negative</div>
                 )}
-              </div>
-              <div className="col-12 col-sm-6 col-lg-4">
+              </motion.div>
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.7 }}
+              >
                 <label className="form-label">Cut Size Area</label>
                 <input 
                   type="text" 
@@ -1270,8 +1885,13 @@ function ProductDetailsPage() {
                 {cutLength && cutWidth && !cutSizeArea && (
                   <div className="text-muted small mt-1">Enter both length and width</div>
                 )}
-              </div>
-              <div className="col-12 col-sm-6 col-lg-4">
+              </motion.div>
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.8 }}
+              >
                 <label className="form-label">Quantity per Sheet</label>
                 <input 
                   type="text" 
@@ -1283,8 +1903,13 @@ function ProductDetailsPage() {
                 {cutLength && cutWidth && selectedSize && !quantityPerSheet && (
                   <div className="text-muted small mt-1">Select full sheet size</div>
                 )}
-              </div>
-              <div className="col-12 col-sm-6 col-lg-4">
+              </motion.div>
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.9 }}
+              >
                 <label className="form-label">Number of Full Sheets Required</label>
                 <input 
                   type="text" 
@@ -1296,8 +1921,13 @@ function ProductDetailsPage() {
                 {quantity && quantityPerSheet && !numberOfFullSheetsRequired && (
                   <div className="text-muted small mt-1">Enter quantity</div>
                 )}
-              </div>
-              <div className="col-12 col-sm-6 col-lg-4">
+              </motion.div>
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 1.0 }}
+              >
                 <label className="form-label">Quantity <span className="text-danger">*</span></label>
                 <input 
                   type="number" 
@@ -1311,9 +1941,28 @@ function ProductDetailsPage() {
                 {quantity && parseInt(quantity) < 1 && (
                   <div className="text-danger small mt-1">Minimum quantity is 1</div>
                 )}
-              </div>
-              <div className="col-12 col-sm-6 col-lg-4">
-                <label className="form-label">Base Price (Full Sheet)</label>
+              </motion.div>
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 1.1 }}
+              >
+                <label className="form-label d-flex justify-content-between align-items-center">
+                    <span>Base Price (Full Sheet)</span>
+                    {isAdmin() && basePrice && selectedSeries && selectedThickness && selectedSize && (
+                      <motion.small
+                        className="text-muted"
+                        style={{ cursor: "pointer", fontSize: "0.8rem" }}
+                        onClick={handleEditPrice}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        Edit Price
+                      </motion.small>
+                    )}
+                  </label>
                 <div className="input-group">
                   <input 
                     type="text" 
@@ -1322,21 +1971,39 @@ function ProductDetailsPage() {
                     readOnly 
                     placeholder="Select Series, Thickness & Size"
                   />
-                  <button 
-                    className="btn btn-outline-success" 
-                    type="button"
-                    onClick={() => setShowPriceModal(true)}
-                    disabled={loading}
-                    title="Add new price"
-                  >
-                    +
-                  </button>
+                  {isAdmin() && (
+                    <>
+                      <motion.button 
+                        className="btn btn-outline-success" 
+                        type="button"
+                        onClick={() => setShowPriceModal(true)}
+                        disabled={loading}
+                        title="Add new price (Admin only)"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        +
+                      </motion.button>
+                     
+                    </>
+                  )}
+                  {isSales() && (
+                    <span className="input-group-text bg-light text-muted" title="Sales users cannot add new prices">
+                      <i className="fas fa-lock"></i>
+                    </span>
+                  )}
                 </div>
                 {!fullSheetPrice && (
                   <div className="text-muted small mt-1">Select Series, Thickness & Size to see base price</div>
                 )}
-              </div>
-              <div className="col-12 col-sm-6 col-lg-4">
+              </motion.div>
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 1.2 }}
+              >
                 <label className="form-label">Cut-to-Size Price Per Unit</label>
                 <input 
                   type="text" 
@@ -1348,8 +2015,13 @@ function ProductDetailsPage() {
                 {!pricePerUnit && (
                   <div className="text-muted small mt-1">Enter quantity to calculate per-unit price</div>
                 )}
-              </div>
-              <div className="col-12 col-sm-6 col-lg-4">
+              </motion.div>
+              <motion.div 
+                className="col-12 col-sm-6 col-lg-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 1.3 }}
+              >
                 <label className="form-label">Total Calculated Price</label>
                 <input 
                   type="text" 
@@ -1361,48 +2033,138 @@ function ProductDetailsPage() {
                 {!calculatedPrice && (
                   <div className="text-muted small mt-1">Enter quantity to calculate total price</div>
                 )}
-              </div>
-            </div>
-          </div>
-          <div className="col-12 col-md-2 text-md-end">
-            <div className="d-flex flex-column gap-2">
-              <button 
-                className="btn btn-primary w-100 w-md-auto" 
+              </motion.div>
+            </motion.div>
+          
+          {/* Horizontal Action Buttons */}
+          <motion.div 
+            className="col-12 mt-5"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.5 }}
+          >
+            <div className="d-flex flex-wrap justify-content-center gap-3">
+              <motion.button 
+                className="btn btn-lg px-5 py-3 rounded-pill shadow-lg"
+                style={{
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  border: 'none',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  minWidth: '180px'
+                }}
                 onClick={showCutSizeQuotation} 
                 disabled={!hasProductDetails || !quantity || !selectedSeries || !selectedThickness || !selectedSize || !cutLength || !cutWidth || !calculatedPrice}
+                whileHover={{ 
+                  scale: 1.05, 
+                  y: -5,
+                  boxShadow: "0 10px 25px rgba(102, 126, 234, 0.4)"
+                }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.3 }}
               >
-                Get Quotation
-              </button>
-              <button 
-                className="btn btn-success w-100 w-md-auto" 
+                <motion.span
+                  className="d-flex align-items-center justify-content-center gap-2"
+                  whileHover={{ x: 2 }}
+                >
+                  <motion.i 
+                    className="fas fa-file-invoice"
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                  />
+                  Get Quotation
+                </motion.span>
+              </motion.button>
+              
+              <motion.button 
+                className="btn btn-lg px-5 py-3 rounded-pill shadow-lg"
+                style={{
+                  background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                  border: 'none',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  minWidth: '180px'
+                }}
                 onClick={handleAddToCart} 
                 disabled={!hasProductDetails || !selectedSeries || !selectedThickness || !selectedSize || !basePrice || !quantity || parseInt(quantity) < 1}
+                whileHover={{ 
+                  scale: 1.05, 
+                  y: -5,
+                  boxShadow: "0 10px 25px rgba(240, 147, 251, 0.4)"
+                }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.3 }}
               >
-                Add to Cart
-              </button>
-              <button 
-                className="btn btn-info w-100 w-md-auto" 
+                <motion.span
+                  className="d-flex align-items-center justify-content-center gap-2"
+                  whileHover={{ x: 2 }}
+                >
+                  <motion.i 
+                    className="fas fa-shopping-cart"
+                    animate={{ y: [0, -3, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  />
+                  Add to Cart
+                </motion.span>
+              </motion.button>
+              
+              <motion.button 
+                className="btn btn-lg px-5 py-3 rounded-pill shadow-lg"
+                style={{
+                  background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                  border: 'none',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  minWidth: '180px'
+                }}
                 onClick={saveCutToSizeQuotation} 
                 disabled={!hasProductDetails || !quantity || !selectedSeries || !selectedThickness || !selectedSize || !cutLength || !cutWidth || !calculatedPrice || savingQuotation}
+                whileHover={{ 
+                  scale: 1.05, 
+                  y: -5,
+                  boxShadow: "0 10px 25px rgba(79, 172, 254, 0.4)"
+                }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.3 }}
               >
-                {savingQuotation ? 'Saving...' : 'Save Quotation'}
-              </button>
+                <motion.span
+                  className="d-flex align-items-center justify-content-center gap-2"
+                  whileHover={{ x: 2 }}
+                >
+                  <motion.i 
+                    className="fas fa-save"
+                    animate={{ rotate: [0, 360] }}
+                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                  />
+                  {savingQuotation ? 'Saving...' : 'Save Quotation'}
+                </motion.span>
+              </motion.button>
             </div>
-            {quotationMessage && <div className={`small mt-2 ${quotationMessage.includes('successfully') ? 'text-success' : 'text-danger'}`}>{quotationMessage}</div>}
-          </div>
-        </div>
+            <AnimatePresence>
+              {quotationMessage && (
+                <motion.div 
+                  className="mt-4 text-center"
+                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.9 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <motion.div 
+                    className={`alert ${quotationMessage.includes('successfully') ? 'alert-success' : 'alert-danger'} rounded-pill d-inline-block px-4 py-2`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    <i className={`fas ${quotationMessage.includes('successfully') ? 'fa-check-circle' : 'fa-exclamation-triangle'} me-2`}></i>
+                    {quotationMessage}
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </motion.div>
       )}
-
-      {/* Minimum Order Notice */}
-      {!loading && !error && (
-        <div className="mt-4 p-3 bg-light rounded">
-          <div className="text-center">
-            <small className="text-muted">
-              $25.00 Minimum Line Item. Minimum Order: $25 USA, $150 Canada/Mexico/PR/VI, $250 International
-            </small>
-          </div>
-        </div>
-      )}
+      </div>
 
       {/* Series Modal */}
       <div className={`modal ${showSeriesModal ? 'show' : ''}`} style={{ display: showSeriesModal ? 'block' : 'none' }}>
@@ -1439,6 +2201,174 @@ function ProductDetailsPage() {
                   disabled={seriesLoading}
                 >
                   {seriesLoading ? 'Adding...' : 'Add Series'}
+                </button>
+                {selectedSeries && !isSales() && (
+                  <button 
+                    type="button" 
+                    className="btn btn-warning ms-2" 
+                    onClick={handleEditSeries}
+                    disabled={seriesLoading}
+                  >
+                    <i className="fas fa-edit"></i> Edit Selected Series
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* Edit Series Modal */}
+      <div className={`modal ${showEditSeriesModal ? 'show' : ''}`} style={{ display: showEditSeriesModal ? 'block' : 'none' }}>
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Edit Series</h5>
+              <button type="button" className="btn-close" onClick={() => {
+                setShowEditSeriesModal(false);
+                setEditSeriesError('');
+                setEditSeriesSuccess('');
+                setEditSeriesFormData({ series: '' });
+                setEditingSeriesId(null);
+              }}></button>
+            </div>
+            <form onSubmit={handleEditSeriesSubmit}>
+              <div className="modal-body">
+                {editSeriesError && <div className="alert alert-danger">{editSeriesError}</div>}
+                {editSeriesSuccess && <div className="alert alert-success">{editSeriesSuccess}</div>}
+                
+                <div className="mb-3">
+                  <label className="form-label">Series Name</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    value={editSeriesFormData.series} 
+                    onChange={(e) => setEditSeriesFormData({...editSeriesFormData, series: e.target.value})}
+                    placeholder="Enter series name"
+                    required 
+                  />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => {
+                  setShowEditSeriesModal(false);
+                  setEditSeriesError('');
+                  setEditSeriesSuccess('');
+                  setEditSeriesFormData({ series: '' });
+                  setEditingSeriesId(null);
+                }}>
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  className="btn btn-warning" 
+                  disabled={editSeriesLoading}
+                >
+                  {editSeriesLoading ? 'Updating...' : 'Update Series'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* Edit Price Modal */}
+      <div className={`modal ${showEditPriceModal ? 'show' : ''}`} style={{ display: showEditPriceModal ? 'block' : 'none' }}>
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Edit Price</h5>
+              <button type="button" className="btn-close" onClick={() => {
+                setShowEditPriceModal(false);
+                setEditPriceError('');
+                setEditPriceSuccess('');
+                setEditPriceFormData({
+                  productDetailId: '',
+                  thicknessId: '',
+                  sizeId: '',
+                  price: ''
+                });
+                setEditingPriceId(null);
+              }}></button>
+            </div>
+            <form onSubmit={handleEditPriceSubmit}>
+              <div className="modal-body">
+                {editPriceError && <div className="alert alert-danger">{editPriceError}</div>}
+                {editPriceSuccess && <div className="alert alert-success">{editPriceSuccess}</div>}
+                
+                <div className="mb-3">
+                  <label className="form-label">Product Detail (Series)</label>
+                  <select 
+                    className="form-select" 
+                    value={editPriceFormData.productDetailId} 
+                    onChange={(e) => setEditPriceFormData({...editPriceFormData, productDetailId: e.target.value})}
+                    required
+                  >
+                    <option value="">Select Series</option>
+                    {productDetails.map(pd => <option key={pd.id} value={pd.id}>{pd.series}</option>)}
+                  </select>
+                </div>
+                
+                <div className="mb-3">
+                  <label className="form-label">Thickness</label>
+                  <select 
+                    className="form-select" 
+                    value={editPriceFormData.thicknessId} 
+                    onChange={(e) => setEditPriceFormData({...editPriceFormData, thicknessId: e.target.value})}
+                    required
+                  >
+                    <option value="">Select Thickness</option>
+                    {thicknesses.map(t => <option key={t.id} value={t.id}>{t.thicknessName}</option>)}
+                  </select>
+                </div>
+                
+                <div className="mb-3">
+                  <label className="form-label">Size</label>
+                  <select 
+                    className="form-select" 
+                    value={editPriceFormData.sizeId} 
+                    onChange={(e) => setEditPriceFormData({...editPriceFormData, sizeId: e.target.value})}
+                    required
+                  >
+                    <option value="">Select Size</option>
+                    {sizes.map(s => <option key={s.id} value={s.id}>{`${s.length}x${s.breadth}`}</option>)}
+                  </select>
+                </div>
+                
+                <div className="mb-3">
+                  <label className="form-label">Price</label>
+                  <input 
+                    type="number" 
+                    step="0.01" 
+                    className="form-control" 
+                    value={editPriceFormData.price} 
+                    onChange={(e) => setEditPriceFormData({...editPriceFormData, price: e.target.value})}
+                    placeholder="Enter price"
+                    required 
+                  />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => {
+                  setShowEditPriceModal(false);
+                  setEditPriceError('');
+                  setEditPriceSuccess('');
+                  setEditPriceFormData({
+                    productDetailId: '',
+                    thicknessId: '',
+                    sizeId: '',
+                    price: ''
+                  });
+                  setEditingPriceId(null);
+                }}>
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  className="btn btn-warning" 
+                  disabled={editPriceLoading}
+                >
+                  {editPriceLoading ? 'Updating...' : 'Update Price'}
                 </button>
               </div>
             </form>
@@ -1713,11 +2643,11 @@ function ProductDetailsPage() {
                       • Cut Size Area: {cutLength} × {cutWidth} = {cutSizeArea} sq units<br/>
                       • Quantity per Sheet: {quantityPerSheet} pieces (from {selectedSize} full sheet)<br/>
                       • Number of Full Sheets Required: {numberOfFullSheetsRequired} sheets<br/>
-                      • Base Price: {fullSheetPrice}<br/>
-                      • Number of Full Sheets Required: {numberOfFullSheetsRequired}<br/>
-                      • Quantity: {quantity}<br/>
-                      • Total Calculated Price: {fullSheetPrice} × {numberOfFullSheetsRequired} × {quantity} = {parseFloat(calculatedPrice).toFixed(2)}<br/>
-                      • Cut-to-Size Price Per Unit: {fullSheetPrice} × {numberOfFullSheetsRequired} ÷ {quantity} = {parseFloat(pricePerUnit).toFixed(2)}
+                      • Base Price (Full Sheet): ₹{fullSheetPrice}<br/>
+                      • Machining Cost: ₹{machiningCost ? parseFloat(machiningCost).toFixed(2) : '0.00'}<br/>
+                      • Total Cost: ₹{fullSheetPrice} × {numberOfFullSheetsRequired} + ₹{machiningCost ? parseFloat(machiningCost).toFixed(2) : '0.00'} = ₹{((parseFloat(fullSheetPrice) * parseInt(numberOfFullSheetsRequired)) + parseFloat(machiningCost || 0)).toFixed(2)}<br/>
+                      • Cut-to-Size Price Per Unit: ₹{((parseFloat(fullSheetPrice) * parseInt(numberOfFullSheetsRequired)) + parseFloat(machiningCost || 0)).toFixed(2)} ÷ {quantity} = ₹{parseFloat(pricePerUnit).toFixed(2)}<br/>
+                      • Total Calculated Price: ₹{parseFloat(pricePerUnit).toFixed(2)} × {quantity} = ₹{parseFloat(calculatedPrice).toFixed(2)}
                     </small>
                   </div>
                 </div>
@@ -1924,17 +2854,17 @@ function ProductDetailsPage() {
         </div>
       </div>
 
+      {/* Modal Backdrops */}
       {showSeriesModal && <div className="modal-backdrop fade show"></div>}
+      {showEditSeriesModal && <div className="modal-backdrop fade show"></div>}
+      {showEditPriceModal && <div className="modal-backdrop fade show"></div>}
       {showThicknessModal && <div className="modal-backdrop fade show"></div>}
       {showSizeModal && <div className="modal-backdrop fade show"></div>}
       {showPriceModal && <div className="modal-backdrop fade show"></div>}
       {showCutSizeModal && <div className="modal-backdrop fade show"></div>}
       {showFullSheetModal && <div className="modal-backdrop fade show"></div>}
       {showAddToCartModal && <div className="modal-backdrop fade show"></div>}
-    </div>
+    </motion.div>
   );
 }
-
 export default ProductDetailsPage;
-
-
