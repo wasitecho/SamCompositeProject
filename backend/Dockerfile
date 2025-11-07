@@ -1,11 +1,24 @@
 # Stage 1: Build
 FROM eclipse-temurin:17-jdk-jammy AS build
 WORKDIR /app
-RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
-COPY pom.xml .
-RUN mvn dependency:go-offline -B
+
+# Copy Maven wrapper files
+COPY .mvn/ .mvn
+COPY pom.xml ./
+
+# Install curl and download standard Unix mvnw script (since we only have mvnw.cmd for Windows)
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/* && \
+    curl -sSL https://raw.githubusercontent.com/apache/maven-wrapper/main/mvnw -o mvnw && \
+    chmod +x mvnw
+
+# Download dependencies (for better caching)
+RUN ./mvnw dependency:go-offline -B
+
+# Copy source code
 COPY src ./src
-RUN mvn clean package -DskipTests
+
+# Build the application
+RUN ./mvnw clean package -DskipTests
 
 # Stage 2: Runtime
 FROM eclipse-temurin:17-jre-jammy
