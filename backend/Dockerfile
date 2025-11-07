@@ -1,7 +1,7 @@
-# Multi-stage build for smaller final image
-# Stage 1: Build
-FROM eclipse-temurin:17-jdk-jammy AS build
+# Use Eclipse Temurin JDK 17 as base image
+FROM eclipse-temurin:17-jdk-jammy
 
+# Set working directory
 WORKDIR /app
 
 # Install Maven
@@ -17,17 +17,9 @@ COPY src ./src
 # Build the application
 RUN mvn clean package -DskipTests
 
-# Stage 2: Runtime
-FROM eclipse-temurin:17-jre-jammy
-
-WORKDIR /app
-
-# Copy the built JAR from build stage
-COPY --from=build /app/target/plastics-demo-backend-0.0.1-SNAPSHOT.jar app.jar
-
 # Expose port (Render will set PORT env var, Spring Boot will use it)
 EXPOSE 8080
 
 # Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "target/plastics-demo-backend-0.0.1-SNAPSHOT.jar"]
 
