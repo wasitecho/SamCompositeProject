@@ -22,7 +22,15 @@ public class JwtUtil {
     private Long expiration;
     
     private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
+        // Decode base64 secret if it's base64 encoded, otherwise use as-is
+        byte[] keyBytes;
+        try {
+            keyBytes = java.util.Base64.getDecoder().decode(secret);
+        } catch (IllegalArgumentException e) {
+            // If not base64, use the string bytes directly
+            keyBytes = secret.getBytes();
+        }
+        return Keys.hmacShaKeyFor(keyBytes);
     }
     
     public String extractUsername(String token) {

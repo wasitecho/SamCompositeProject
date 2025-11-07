@@ -19,27 +19,36 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-    
+
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
-    
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-    
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+        http
+            .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.and())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
-                // Public endpoints
+                // ✅ Public endpoints (accessible without JWT)
+                .requestMatchers(
+                    "/",                    // root endpoint
+                    "/health",              // optional health check
+                    "/dbcheck",             // db status check
+                    "/favicon.ico"          // avoid 403 for favicon requests
+                ).permitAll()
+
+                // ✅ Existing open API endpoints
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/products/**").permitAll()
                 .requestMatchers("/api/categories/**").permitAll()
@@ -50,15 +59,16 @@ public class SecurityConfig {
                 .requestMatchers("/api/product-size/**").permitAll()
                 .requestMatchers("/api/cart/**").permitAll()
                 .requestMatchers("/api/quotations/**").permitAll()
-                
-                // Admin only endpoints - will be protected by @PreAuthorize
+
+                // ✅ Admin-protected routes
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                
-                // All other requests need authentication
+
+                // ✅ Everything else requires authentication
                 .anyRequest().authenticated()
             )
+            // ✅ Add your JWT filter before UsernamePasswordAuthenticationFilter
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        
+
         return http.build();
     }
 }
